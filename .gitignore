@@ -1,0 +1,29 @@
+# ---- DATOS PERSONALES: NUNCA se versionan -------------------------
+# La nomina nominal contiene nombres reales de 141 egresados.
+# Ley N 29733 - Proteccion de Datos Personales.
+data/raw/*
+!data/raw/.gitkeep
+
+# Artefactos generados por el pipeline
+data/marts/
+*.duckdb
+*.duckdb.wal
+
+# Secretos
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# Node / Evidence
+node_modules/
+.evidence/
+
+# Sistema
+.DS_Store
+Thumbs.db
