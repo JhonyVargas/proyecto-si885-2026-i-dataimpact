@@ -17,6 +17,9 @@ Docente: *CUADROS QUIROGA, PATRICK JOSE*
 Integrantes:
 
 ***Pacompía Ortiz Abel Fernando  (2023076797)***
+***Cruz Mamani Victor Williams	(2022073903)***
+***Vargas Luque, Jhony 			(2022075754)***
+
 
 **Tacna – Perú**
 
@@ -33,6 +36,7 @@ Versión *1.0*
 
 |CONTROL DE VERSIONES||||||
 | :-: | :- | :- | :- | :- | :- |
+
 |Versión|Hecha por|Revisada por|Aprobada por|Fecha|Motivo|
 |1.0|AJV|P. Cuadros Q.|P. Cuadros Q.|22/08/2026|Versión Original Completa|
 
