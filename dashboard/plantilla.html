@@ -1,0 +1,1109 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Empleabilidad EPIS UPT</title>
+<style>
+  /* ===========================================================
+     Sistema visual. Los categoricos son la paleta validada del
+     proyecto (orden fijo, adyacentes, ambos modos). El color NO
+     se asigna por rango: una entidad conserva su tono al filtrar.
+     =========================================================== */
+  :root {
+    color-scheme: light;
+    --plane:    #f4f4f1;
+    --surface:  #fcfcfb;
+    --raised:   #ffffff;
+    --ink:      #0b0b0b;
+    --ink-2:    #52514e;
+    --muted:    #8a8884;
+    --grid:     #e6e5de;
+    --line:     #dcdbd4;
+    --axis:     #c3c2b7;
+
+    --c1: #2a78d6;  --c2: #eb6834;  --c3: #1baf7a;  --c4: #eda100;
+    --c5: #e87ba4;  --c6: #008300;  --c7: #4a3aa7;  --c8: #e34948;
+    --o1: #1c5cab;  --o2: #2a78d6;  --o3: #86b6ef;
+    --none:   #dcdbd4;
+    --accent: #1c5cab;
+
+    --warn-bg: #fdf7e8;
+    --warn-bd: #eda100;
+
+    /* Pista de medidor: paso mas claro de la misma rampa, nunca gris. */
+    --track: color-mix(in srgb, var(--c1) 16%, var(--raised));
+
+    --r:      6px;
+    --r-card: 12px;
+    --shadow: 0 1px 1px rgb(11 11 11 / .03),
+              0 2px 6px rgb(11 11 11 / .03),
+              0 10px 28px rgb(11 11 11 / .045);
+    --ring:   0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --plane:   #0c0c0b;
+      --surface: #171716;
+      --raised:  #201f1e;
+      --ink:     #ffffff;
+      --ink-2:   #c3c2b7;
+      --muted:   #8f8d87;
+      --grid:    #2c2c2a;
+      --line:    #302f2d;
+      --axis:    #3b3b38;
+      --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500;
+      --c5: #d55181; --c6: #008300; --c7: #9085e9; --c8: #e66767;
+      --o1: #86b6ef; --o2: #3987e5; --o3: #184f95;
+      --none:   #343431;
+      --accent: #86b6ef;
+      --warn-bg: #221d10;
+      --warn-bd: #c98500;
+      --shadow: 0 1px 1px rgb(0 0 0 / .4),
+                0 2px 6px rgb(0 0 0 / .3),
+                0 10px 28px rgb(0 0 0 / .3);
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --plane:   #0c0c0b;
+    --surface: #171716;
+    --raised:  #201f1e;
+    --ink:     #ffffff;
+    --ink-2:   #c3c2b7;
+    --muted:   #8f8d87;
+    --grid:    #2c2c2a;
+    --line:    #302f2d;
+    --axis:    #3b3b38;
+    --c1: #3987e5; --c2: #d95926; --c3: #199e70; --c4: #c98500;
+    --c5: #d55181; --c6: #008300; --c7: #9085e9; --c8: #e66767;
+    --o1: #86b6ef; --o2: #3987e5; --o3: #184f95;
+    --none:   #343431;
+    --accent: #86b6ef;
+    --warn-bg: #221d10;
+    --warn-bd: #c98500;
+    --shadow: 0 1px 1px rgb(0 0 0 / .4),
+              0 2px 6px rgb(0 0 0 / .3),
+              0 10px 28px rgb(0 0 0 / .3);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: env(safe-area-inset-top, 0px) 0 calc(env(safe-area-inset-bottom, 0px) + 4rem);
+    background: var(--plane);
+    color: var(--ink);
+    font: 14px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Cifras tabulares SOLO donde los numeros se alinean en columna.
+     En las cifras grandes las proporcionales se leen mejor. */
+  table, .tick, .hval, .mval, .pn, .vlab, .vlab-b { font-variant-numeric: tabular-nums; }
+
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 24px; }
+  :where(button, [tabindex]):focus-visible { outline: none; box-shadow: var(--ring); border-radius: var(--r); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+  /* ================= Cabecera ================= */
+  .top {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding-block: 2.6rem 2rem;
+  }
+  .top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; }
+  .rule { width: 34px; height: 2px; background: var(--accent); border-radius: 2px; margin-bottom: .95rem; }
+  .eyebrow {
+    font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 .75rem; font-weight: 600;
+  }
+  h1 {
+    margin: 0 0 .6rem; font-size: clamp(1.7rem, 4.4vw, 2.6rem);
+    line-height: 1.08; letter-spacing: -.03em; font-weight: 640;
+  }
+  .sub { margin: 0; color: var(--ink-2); max-width: 64ch; font-size: 15px; line-height: 1.6; }
+  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1.25rem; }
+  .chip {
+    font-size: 11.5px; color: var(--ink-2); background: var(--plane);
+    border: 1px solid var(--grid); border-radius: 100px; padding: .26rem .7rem;
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  .theme-btn {
+    background: var(--plane); color: var(--ink-2); border: 1px solid var(--grid);
+    border-radius: 100px; padding: .4rem .9rem; font: inherit; font-size: 12px;
+    cursor: pointer; flex: none; transition: border-color .15s, color .15s;
+  }
+  .theme-btn:hover { border-color: var(--axis); color: var(--ink); }
+
+  /* ================= Aviso metodologico ================= */
+  .aviso {
+    margin-top: 1.7rem; padding: 1rem 1.2rem;
+    background: var(--warn-bg); border: 1px solid var(--grid);
+    border-left: 3px solid var(--warn-bd);
+    border-radius: 0 var(--r) var(--r) 0;
+    display: flex; gap: .85rem; align-items: flex-start;
+  }
+  .aviso svg { flex: none; width: 17px; height: 17px; margin-top: 2px; color: var(--warn-bd); }
+  .aviso strong { display: block; margin-bottom: .3rem; font-size: 13px; color: var(--ink); }
+  .aviso p { margin: 0; color: var(--ink-2); font-size: 12.5px; line-height: 1.55; max-width: 92ch; }
+
+  /* ========== Filtros: una sola fila, encima de todo lo que afecta ========= */
+  .filtros {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--plane) 88%, transparent);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding-block: .75rem;
+  }
+  .filtros-in { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.5rem; }
+  .fgroup { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; }
+  .flabel { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .pills { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .pill {
+    font: inherit; font-size: 12px; cursor: pointer;
+    background: var(--raised); color: var(--ink-2);
+    border: 1px solid var(--grid); border-radius: 100px;
+    padding: .24rem .66rem; transition: background .13s, border-color .13s, color .13s;
+  }
+  .pill:hover { border-color: var(--axis); color: var(--ink); }
+  .pill[aria-pressed="true"] {
+    background: var(--accent); border-color: var(--accent);
+    color: var(--raised); font-weight: 550;
+  }
+  :root[data-theme="dark"] .pill[aria-pressed="true"],
+  :root:where(:not([data-theme="light"])) .pill[aria-pressed="true"] { color: #0b0b0b; }
+  .nbadge {
+    margin-left: auto; font-size: 12px; color: var(--ink-2);
+    background: var(--raised); border: 1px solid var(--grid);
+    border-radius: 100px; padding: .26rem .75rem; white-space: nowrap;
+  }
+  .nbadge b { color: var(--ink); font-weight: 600; }
+  .reset {
+    font: inherit; font-size: 12px; background: none; border: none;
+    color: var(--muted); cursor: pointer; text-decoration: underline;
+    text-underline-offset: 3px; padding: .2rem;
+  }
+  .reset:hover { color: var(--ink); }
+
+  /* ================= Franja de seccion ================= */
+  .band { display: flex; align-items: center; gap: .9rem; margin: 2.5rem 0 1rem; }
+  .band h2 {
+    margin: 0; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 650; white-space: nowrap;
+  }
+  .band::after { content: ""; flex: 1; height: 1px; background: var(--grid); }
+
+  /* ================= Tarjetas KPI ================= */
+  .tiles { display: grid; gap: 14px; grid-template-columns: 1.35fr 1fr 1fr 1fr; align-items: stretch; margin-top: 1.9rem; }
+  @media (max-width: 1000px) { .tiles { grid-template-columns: repeat(2, 1fr); } .tile.hero { grid-column: span 2; } }
+  @media (max-width: 560px)  { .tiles { grid-template-columns: 1fr; } .tile.hero { grid-column: auto; } }
+  .tile {
+    background: var(--raised); border: 1px solid var(--grid);
+    border-radius: var(--r-card); padding: 1.2rem 1.25rem; box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+  }
+  .tile .lbl {
+    font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600;
+  }
+  .tile .val {
+    font-size: 2.1rem; font-weight: 620; line-height: 1.02;
+    margin-top: .55rem; letter-spacing: -.035em;
+  }
+  .tile .note { font-size: 12px; color: var(--ink-2); margin-top: auto; padding-top: .55rem; line-height: 1.45; }
+
+  /* Una sola cifra protagonista por vista. */
+  .tile.hero { border-color: color-mix(in srgb, var(--c1) 32%, var(--grid)); }
+  .tile.hero .val {
+    font-size: clamp(2.9rem, 6.2vw, 3.7rem); color: var(--accent);
+    margin-top: .5rem; letter-spacing: -.045em;
+  }
+  .tile.hero .note { margin-top: auto; padding-top: .8rem; }
+  .hero-meter { height: 8px; border-radius: 100px; background: var(--track); overflow: hidden; margin-top: .9rem; }
+  .hero-meter > span { display: block; height: 100%; background: var(--c1); border-radius: 100px; transition: width .3s ease; }
+
+  /* ================= Paneles ================= */
+  .grid { display: grid; gap: 16px; }
+  .g-72 { grid-template-columns: 1.62fr 1fr; align-items: stretch; }
+  .g-11 { grid-template-columns: 1fr 1fr; }
+  .col { display: flex; flex-direction: column; gap: 16px; }
+  @media (max-width: 980px) { .g-72, .g-11 { grid-template-columns: 1fr; } }
+
+  .panel {
+    background: var(--raised); border: 1px solid var(--grid);
+    border-radius: var(--r-card); padding: 1.4rem; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; min-width: 0;
+  }
+  .phead { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .panel h2 { margin: 0; font-size: 14px; font-weight: 620; letter-spacing: -.012em; }
+  .pn {
+    font-size: 11px; color: var(--muted); white-space: nowrap;
+    background: var(--plane); border-radius: 100px; padding: .14rem .5rem;
+  }
+  .pn:empty { display: none; }
+  .panel .cap { margin: .35rem 0 1.3rem; font-size: 12px; color: var(--muted); line-height: 1.5; max-width: 58ch; }
+
+  .chart { width: 100%; }
+  svg { display: block; max-width: 100%; }
+  .bar { transition: opacity .13s; cursor: default; }
+  .bar:hover { opacity: .82; }
+  text { font-family: inherit; }
+  .tick { font-size: 11px; fill: var(--muted); }
+  .vlab { font-size: 11px; fill: var(--ink-2); }
+  .vlab-b { font-size: 11.5px; fill: var(--ink); font-weight: 650; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: .45rem 1.1rem; margin-top: 1.1rem; font-size: 11.5px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: .42rem; }
+  .legend b { color: var(--ink); font-weight: 600; }
+  .swatch { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+
+  .vacio { color: var(--muted); font-size: 12.5px; padding: 1.6rem 0; text-align: center; }
+
+  /* ================= Barras horizontales (HTML, no SVG) =================
+     En HTML el texto conserva su tamano real cualquiera sea el ancho del
+     panel; un viewBox escalado deformaria la tipografia. */
+  .hrow { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
+  .hrow:last-child { margin-bottom: 0; }
+  .hlab {
+    width: 36%; max-width: 172px; flex: none; font-size: 12px; color: var(--ink-2);
+    text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .htrack { flex: 1; min-width: 0; display: block; padding-block: 4px; }
+  .hfill {
+    display: block; height: 20px; border-radius: 0 4px 4px 0;
+    transition: width .25s ease; min-width: 3px;
+  }
+  .hrow:hover .hfill { opacity: .84; }
+  .hval { flex: none; min-width: 2.5ch; font-size: 12px; font-weight: 650; color: var(--ink); }
+
+  /* ================= Medidores ================= */
+  .meter { display: flex; align-items: center; gap: .7rem; margin-bottom: .65rem; }
+  .meter:last-child { margin-bottom: 0; }
+  .meter .mlab { width: 48px; font-size: 12px; color: var(--ink-2); flex: none; }
+  .meter .mtrack { flex: 1; height: 8px; background: var(--track); border-radius: 100px; overflow: hidden; }
+  .meter .mfill { display: block; height: 100%; border-radius: 100px; transition: width .25s; }
+  .meter .mval { font-size: 12px; color: var(--ink-2); min-width: 2.5ch; text-align: right; flex: none; }
+
+  /* ================= Tooltip ================= */
+  #tip {
+    position: fixed; pointer-events: none; z-index: 40; opacity: 0;
+    background: var(--ink); color: var(--plane); font-size: 12px; line-height: 1.5;
+    padding: .55rem .7rem; border-radius: var(--r); max-width: 260px;
+    transition: opacity .1s; box-shadow: 0 6px 22px rgb(0 0 0 / .32);
+  }
+  #tip b { font-weight: 650; }
+  #tip .t-sub { color: color-mix(in srgb, var(--plane) 62%, transparent); }
+
+  /* ========== Tabla gemela: ningun valor queda detras del hover ========== */
+  .tbl-toggle {
+    margin-top: auto; padding-top: 0; align-self: flex-start; background: none;
+    border: 1px solid var(--grid); color: var(--muted);
+    border-radius: 100px; padding: .28rem .75rem; font: inherit; font-size: 11.5px;
+    cursor: pointer; transition: border-color .13s, color .13s;
+  }
+  .tbl-toggle:hover { border-color: var(--axis); color: var(--ink); }
+  .legend, .chart, .hlist, #confianza { margin-bottom: 1.25rem; }
+  .tbl-wrap { overflow-x: auto; margin-top: 1rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  thead th { color: var(--muted); font-weight: 600; font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; }
+
+  /* ================= Nota / pie ================= */
+  .nota ul { margin: 0; padding-left: 1.2rem; color: var(--ink-2); font-size: 12.5px; }
+  .nota li { margin-bottom: .6rem; line-height: 1.6; max-width: 92ch; }
+  .nota li:last-child { margin-bottom: 0; }
+  .nota b { color: var(--ink); font-weight: 620; }
+  footer {
+    margin-top: 2.6rem; padding-top: 1.4rem; border-top: 1px solid var(--line);
+    font-size: 12px; color: var(--muted); line-height: 1.6;
+  }
+  footer p { margin: 0 0 .5rem; max-width: 100ch; }
+  footer b { color: var(--ink-2); font-weight: 620; }
+
+  /* ========== Impresion: el tablero termina pegado en el informe ========= */
+  @media print {
+    :root { --shadow: none; }
+    body { background: #fff; padding: 0; }
+    .filtros, .theme-btn, .tbl-toggle { display: none !important; }
+    .panel, .tile { break-inside: avoid; border-color: #ccc; }
+    .band { break-after: avoid; }
+    .top { padding-block: 0 1.2rem; }
+  }
+
+  svg { height: auto; }
+
+  /* ============ Movimiento: entrada escalonada y crecimiento ============
+     Todo bajo prefers-reduced-motion queda anulado mas arriba. */
+  @keyframes aparecer { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes crecer   { from { transform: scaleY(0); }  to { transform: scaleY(1); } }
+  @keyframes entrar   { from { opacity: 0; }            to { opacity: 1; } }
+
+  .tile, .panel { animation: aparecer .5s cubic-bezier(.22,1,.36,1) both; }
+  .tiles .tile:nth-child(1) { animation-delay: .00s; }
+  .tiles .tile:nth-child(2) { animation-delay: .05s; }
+  .tiles .tile:nth-child(3) { animation-delay: .10s; }
+  .tiles .tile:nth-child(4) { animation-delay: .15s; }
+  .panel { animation-delay: .08s; }
+
+  /* Columnas: crecen desde la linea base, nunca desde el centro. */
+  .col-g {
+    transform-box: fill-box; transform-origin: bottom;
+    animation: crecer .55s cubic-bezier(.22,1,.36,1) both;
+    transition: opacity .15s;
+  }
+  .cols:hover > .col-g { opacity: .38; }
+  .cols > .col-g:hover { opacity: 1; }
+  .col-g.on > .bar { stroke: var(--accent); stroke-width: 1.5; }
+  .clic { cursor: pointer; }
+  .clic:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  .seg { animation: entrar .5s ease both; }
+
+  .hrow { transition: opacity .15s; }
+  .hlist:hover .hrow { opacity: .45; }
+  .hlist .hrow:hover { opacity: 1; }
+  .hrow.on .hlab { color: var(--ink); font-weight: 600; }
+  .hrow.on .hval { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div>
+        <div class="rule"></div>
+        <p class="eyebrow">Universidad Privada de Tacna &middot; Escuela Profesional de Ingeniería de Sistemas</p>
+        <h1>Empleabilidad de egresados</h1>
+        <p class="sub">
+          Seguimiento de la situación laboral de las promociones 2017&ndash;2024, a partir del
+          marco censal oficial de bachilleres contrastado con fuentes públicas.
+        </p>
+        <div class="chips" id="chips"></div>
+      </div>
+      <button class="theme-btn" id="theme" type="button">Tema</button>
+    </div>
+
+    <div class="aviso">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/>
+      </svg>
+      <div>
+        <strong>Qué mide este tablero, y qué no</strong>
+        <p id="aviso-txt"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="filtros">
+  <div class="wrap filtros-in">
+    <div class="fgroup">
+      <span class="flabel">Promoción</span>
+      <div class="pills" id="f-anio"></div>
+    </div>
+    <div class="fgroup">
+      <span class="flabel">Sector</span>
+      <div class="pills" id="f-sector"></div>
+    </div>
+    <button class="reset" id="reset" type="button" hidden>Limpiar filtros</button>
+    <span class="nbadge" id="nbadge"></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="tiles" id="tiles"></section>
+
+  <div class="band"><h2>Cobertura del seguimiento</h2></div>
+  <div class="grid g-72">
+    <section class="panel">
+      <div class="phead">
+        <h2>Cobertura de información por promoción</h2>
+        <span class="pn" id="n-anio"></span>
+      </div>
+      <p class="cap">Egresados por año de grado, según se conozca o no su situación laboral.</p>
+      <div class="chart"><svg id="c-anio" role="img" aria-label="Cobertura por promoción"></svg></div>
+      <div class="legend">
+        <span><i class="swatch" style="background:var(--c1)"></i>Con evidencia laboral</span>
+        <span><i class="swatch" style="background:var(--none)"></i>Situación desconocida</span>
+      </div>
+      <button class="tbl-toggle" data-tbl="t-anio">Ver tabla</button>
+      <div class="tbl-wrap" id="t-anio" hidden></div>
+    </section>
+
+    <div class="col">
+      <section class="panel">
+        <div class="phead">
+          <h2>Estado de la evidencia</h2>
+          <span class="pn" id="n-estado"></span>
+        </div>
+        <p class="cap">Tipo de información disponible para cada egresado.</p>
+        <div class="chart"><svg id="c-estado" role="img" aria-label="Estado de la evidencia"></svg></div>
+        <div class="legend" id="l-estado"></div>
+        <button class="tbl-toggle" data-tbl="t-estado">Ver tabla</button>
+        <div class="tbl-wrap" id="t-estado" hidden></div>
+      </section>
+
+      <section class="panel">
+        <div class="phead">
+          <h2>¿Se quedan en Tacna?</h2>
+          <span class="pn" id="n-geo"></span>
+        </div>
+        <p class="cap">Ubicación deducible del empleador. Ver nota metodológica.</p>
+        <div class="chart"><svg id="c-geo" role="img" aria-label="Distribución geográfica"></svg></div>
+        <div class="legend" id="l-geo"></div>
+        <button class="tbl-toggle" data-tbl="t-geo">Ver tabla</button>
+        <div class="tbl-wrap" id="t-geo" hidden></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="band"><h2>Perfil laboral de los egresados</h2></div>
+  <div class="grid g-11">
+    <section class="panel">
+      <div class="phead">
+        <h2>Sector del empleador</h2>
+        <span class="pn" id="n-sector"></span>
+      </div>
+      <p class="cap">Distribución de los egresados con empleo verificado.</p>
+      <div id="c-sector"></div>
+      <button class="tbl-toggle" data-tbl="t-sector">Ver tabla</button>
+      <div class="tbl-wrap" id="t-sector" hidden></div>
+    </section>
+
+    <section class="panel">
+      <div class="phead">
+        <h2>Área de desempeño</h2>
+        <span class="pn" id="n-area"></span>
+      </div>
+      <p class="cap">Solo los casos en que la fuente declara el cargo, no solo la empresa.</p>
+      <div id="c-area"></div>
+      <button class="tbl-toggle" data-tbl="t-area">Ver tabla</button>
+      <div class="tbl-wrap" id="t-area" hidden></div>
+    </section>
+  </div>
+
+  <div class="band"><h2>Concentración y calidad de la evidencia</h2></div>
+  <div class="grid g-11">
+    <section class="panel">
+      <div class="phead">
+        <h2>Empleadores con más de un egresado</h2>
+        <span class="pn" id="n-emp"></span>
+      </div>
+      <p class="cap">Concentración de la absorción laboral.</p>
+      <div id="c-emp"></div>
+      <button class="tbl-toggle" data-tbl="t-emp">Ver tabla</button>
+      <div class="tbl-wrap" id="t-emp" hidden></div>
+    </section>
+
+    <section class="panel">
+      <div class="phead">
+        <h2>Confiabilidad de la evidencia</h2>
+        <span class="pn" id="n-conf"></span>
+      </div>
+      <p class="cap">Un perfil verificado directamente pesa más que una entrada de directorio.</p>
+      <div id="confianza"></div>
+    </section>
+  </div>
+
+  <div class="band"><h2>Metodología</h2></div>
+  <div class="grid">
+    <section class="panel nota">
+      <h2 style="margin-bottom:.9rem">Nota metodológica</h2>
+      <ul id="nota-lista"></ul>
+    </section>
+  </div>
+
+  <footer>
+    <p><b>Fuente maestra:</b> nómina oficial de bachilleres publicada por la EPIS&ndash;UPT (2017&ndash;2024), contrastada con perfiles públicos de LinkedIn. Corte: setiembre 2026.</p>
+    <p><b>Privacidad:</b> construido sobre identificadores seudonimizados. No se publica ningún dato personal identificable (Ley N.&deg; 29733).</p>
+    <p><b>Reproducibilidad:</b> generado por el pipeline del proyecto. Cada ejecución reconstruye este tablero desde la nómina cruda.</p>
+  </footer>
+</div>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const DATOS = /*__DATOS__*/ null;
+
+/* ================= utilidades ================= */
+const $ = (s) => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const el = (n, a = {}) => {
+  const e = document.createElementNS(NS, n);
+  for (const [k, v] of Object.entries(a)) e.setAttribute(k, v);
+  return e;
+};
+const pct = (n, d) => (d ? (100 * n / d) : 0);
+const f1 = (x) => (Math.round(x * 10) / 10).toFixed(1).replace(/\.0$/, "");
+
+/* Etiquetas de presentacion: el almacen guarda sin tildes para no depender de
+   la codificacion; la capa visual las muestra en castellano. */
+const ETIQ = {
+  "Sin informacion": "Sin información",
+  "Educacion": "Educación",
+  "Publico": "Público",
+  "Mineria": "Minería",
+  "TI / Consultoria": "TI / Consultoría",
+  "Gestion de Proyectos": "Gestión de Proyectos",
+};
+const etiq = (t) => ETIQ[t] ?? t;
+
+/* Color por ENTIDAD, nunca por rango: un filtro que cambia el orden no
+   debe repintar las categorias que sobreviven. */
+const COLOR_SECTOR = {
+  "TI / Consultoria": "var(--c1)",
+  "Educacion":        "var(--c2)",
+  "Financiero":       "var(--c3)",
+  "Publico":          "var(--c4)",
+  "Servicios":        "var(--c5)",
+  "Mineria":          "var(--c6)",
+  "Independiente":    "var(--c7)",
+  "No determinado":   "var(--none)",
+};
+const COLOR_AREA = {
+  "Desarrollo de Software":    "var(--c1)",
+  "Datos / BI / IA":           "var(--c3)",
+  "Infraestructura y Soporte": "var(--c4)",
+  "Gestion de Proyectos":      "var(--c7)",
+  "Docencia":                  "var(--c2)",
+};
+const COLOR_GEO = {
+  "Tacna":          "var(--c1)",
+  "Lima":           "var(--c2)",
+  "No determinado": "var(--none)",
+};
+const ORDEN_ESTADO = ["Empleo verificado", "No confirmado", "Sin evidencia laboral", "Sin informacion"];
+const COLOR_ESTADO = ["var(--o1)", "var(--o2)", "var(--o3)", "var(--none)"];
+
+/* ================= tooltip ================= */
+const tip = $("#tip");
+function conTooltip(nodo, html) {
+  nodo.addEventListener("pointerenter", (ev) => {
+    tip.innerHTML = html; tip.style.opacity = "1"; mover(ev);
+  });
+  nodo.addEventListener("pointermove", mover);
+  nodo.addEventListener("pointerleave", () => { tip.style.opacity = "0"; });
+  function mover(ev) {
+    const r = tip.getBoundingClientRect();
+    let x = ev.clientX + 14, y = ev.clientY - r.height - 12;
+    if (x + r.width > innerWidth - 10) x = ev.clientX - r.width - 14;
+    if (y < 10) y = ev.clientY + 20;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  }
+}
+
+/* Extremo de dato redondeado, base recta. */
+function pathBarra(x, y, w, h, r, dir) {
+  if (dir === "arriba") {
+    r = Math.min(r, w / 2, h);
+    if (h <= r) return `M${x},${y + h}h${w}v${-h}h${-w}z`;
+    return `M${x},${y + h}V${y + r}a${r},${r} 0 0 1 ${r},${-r}h${w - 2 * r}a${r},${r} 0 0 1 ${r},${r}V${y + h}z`;
+  }
+  r = Math.min(r, h / 2, w);
+  if (w <= r) return `M${x},${y}h${w}v${h}h${-w}z`;
+  return `M${x},${y}h${w - r}a${r},${r} 0 0 1 ${r},${r}v${h - 2 * r}a${r},${r} 0 0 1 ${-r},${r}h${-(w - r)}z`;
+}
+
+function tabla(destino, cols, filas) {
+  if (!filas.length) { destino.innerHTML = '<p class="vacio">Sin datos para este filtro.</p>'; return; }
+  const t = document.createElement("table");
+  const thead = document.createElement("thead"), tr = document.createElement("tr");
+  cols.forEach((c) => {
+    const th = document.createElement("th");
+    th.textContent = c.t; if (c.num) th.className = "num"; tr.appendChild(th);
+  });
+  thead.appendChild(tr); t.appendChild(thead);
+  const tb = document.createElement("tbody");
+  filas.forEach((f) => {
+    const r = document.createElement("tr");
+    cols.forEach((c) => {
+      const td = document.createElement("td");
+      td.textContent = c.v(f); if (c.num) td.className = "num"; r.appendChild(td);
+    });
+    tb.appendChild(r);
+  });
+  t.appendChild(tb); destino.replaceChildren(t);
+}
+
+function vacio(svgId) {
+  const svg = document.getElementById(svgId);
+  svg.removeAttribute("width"); svg.removeAttribute("height");
+  svg.setAttribute("viewBox", "0 0 400 60");
+  svg.replaceChildren();
+  const t = el("text", { x: 200, y: 34, "text-anchor": "middle", class: "tick" });
+  t.textContent = "Sin datos para este filtro";
+  svg.appendChild(t);
+}
+
+/* ================= graficos ================= */
+
+/* Escala de ejes en numeros limpios (1, 2, 2.5, 5, 10 x potencia de diez). */
+function escalaBonita(max, divisiones) {
+  const crudo = Math.max(max, 1) / divisiones;
+  const mag = Math.pow(10, Math.floor(Math.log10(crudo)));
+  const paso = ([1, 2, 2.5, 5, 10].find((m) => crudo <= m * mag) || 10) * mag;
+  return { paso, tope: Math.max(Math.ceil(max / paso) * paso, paso) };
+}
+
+/* Conteo animado: la cifra viaja de su valor anterior al nuevo. */
+function animarNumero(nodo, destino, fmt) {
+  const desde = Number(nodo.dataset.v || 0);
+  nodo.dataset.v = destino;
+  if (REDUCIDO || desde === destino) { nodo.textContent = fmt(destino); return; }
+  const t0 = performance.now(), dur = 520;
+  cancelAnimationFrame(Number(nodo.dataset.raf || 0));
+  const paso = (t) => {
+    const k = Math.min((t - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - k, 3);
+    nodo.textContent = fmt(desde + (destino - desde) * e);
+    if (k < 1) nodo.dataset.raf = requestAnimationFrame(paso);
+  };
+  nodo.dataset.raf = requestAnimationFrame(paso);
+}
+
+/* Marca interactiva: clic y teclado hacen lo mismo. */
+function hacerClicable(nodo, etiqueta, accion) {
+  nodo.classList.add("clic");
+  nodo.setAttribute("role", "button");
+  nodo.setAttribute("tabindex", "0");
+  nodo.setAttribute("aria-label", etiqueta);
+  nodo.addEventListener("click", accion);
+  nodo.addEventListener("keydown", (ev) => {
+    if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); accion(); }
+  });
+}
+
+/* Barras horizontales en HTML, no SVG: el texto conserva su tamano real
+   cualquiera sea el ancho del panel, cosa que un viewBox escalado no permite. */
+function barrasH(contId, filas, kEt, kVal, mapaColor, total, filtro) {
+  const cont = document.getElementById(contId);
+  if (!filas.length) {
+    cont.innerHTML = '<p class="vacio">Sin datos para este filtro.</p>';
+    return;
+  }
+  const max = Math.max(...filas.map((f) => f[kVal]), 1);
+  const lista = document.createElement("div");
+  lista.className = "hlist";
+
+  filas.forEach((f) => {
+    const color = mapaColor ? (mapaColor[f[kEt]] || "var(--none)") : "var(--c1)";
+    const activo = filtro && F[filtro.conjunto].has(f[kEt]);
+    const fila = document.createElement("div");
+    fila.className = "hrow" + (activo ? " on" : "");
+    fila.innerHTML = '<span class="hlab" title="' + etiq(f[kEt]) + '">' + etiq(f[kEt]) + '</span>'
+      + '<span class="htrack"><span class="hfill" style="width:0;background:' + color + '"></span></span>'
+      + '<span class="hval">' + f[kVal] + '</span>';
+    lista.appendChild(fila);
+
+    const ancho = Math.max(pct(f[kVal], max), 1.5);
+    const relleno = fila.querySelector(".hfill");
+    requestAnimationFrame(() => { relleno.style.width = ancho + "%"; });
+
+    conTooltip(fila.querySelector(".htrack"),
+      "<b>" + etiq(f[kEt]) + "</b><br>" + f[kVal] + " egresado" + (f[kVal] === 1 ? "" : "s")
+      + (total ? '<br><span class="t-sub">' + f1(pct(f[kVal], total)) + "% del total mostrado</span>" : "")
+      + (filtro ? '<br><span class="t-sub">Clic para ' + (activo ? "quitar el filtro" : "filtrar") + "</span>" : ""));
+
+    if (filtro) {
+      hacerClicable(fila, (activo ? "Quitar filtro " : "Filtrar por ") + etiq(f[kEt]),
+        () => alternar(filtro.tipo, f[kEt]));
+    }
+  });
+  cont.replaceChildren(lista);
+}
+
+/* Columnas apiladas por promocion. Se dibuja a la medida real del panel
+   (1:1 px) para que la tipografia no se escale con el viewBox. */
+function barrasAnio(svgId, filas) {
+  const svg = document.getElementById(svgId);
+  if (!filas.length) return vacio(svgId);
+
+  const W = Math.max(Math.round(svg.parentElement.clientWidth) || 560, 300);
+  const H = 264, mT = 30, mB = 42, mI = 36;
+  const util = H - mT - mB;
+  const { paso: pasoY, tope } = escalaBonita(Math.max(...filas.map((f) => f.total), 1), 4);
+  const banda = (W - mI) / filas.length;
+  const ancho = Math.max(Math.min(banda - 16, 24), 6);
+  const y = (v) => mT + util - (v / tope) * util;
+
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  svg.replaceChildren();
+
+  for (let v = 0; v <= tope + 1e-9; v += pasoY) {
+    svg.appendChild(el("line", { x1: mI, x2: W, y1: y(v), y2: y(v), stroke: "var(--grid)", "stroke-width": 1 }));
+    const t = el("text", { x: mI - 10, y: y(v) + 4, "text-anchor": "end", class: "tick" });
+    t.textContent = Math.round(v);
+    svg.appendChild(t);
+  }
+
+  /* Se rotula solo lo que cuenta la historia: el extremo alto y el bajo. */
+  const cob = filas.map((f) => pct(f.con, f.total));
+  const iMax = cob.indexOf(Math.max(...cob));
+  const iMin = cob.indexOf(Math.min(...cob));
+  const rotular = new Set(filas.length === 1 ? [0] : [iMax, iMin]);
+
+  const cols = el("g", { class: "cols" });
+  svg.appendChild(cols);
+
+  filas.forEach((f, i) => {
+    const x = mI + i * banda + (banda - ancho) / 2;
+    const hTot = (f.total / tope) * util;
+    const hCon = (f.con / tope) * util;
+    const yTot = mT + util - hTot;
+    const activo = F.anios.has(f.anio);
+
+    const g = el("g", { class: "col-g" + (activo ? " on" : "") });
+    g.style.animationDelay = (i * 45) + "ms";
+
+    /* 2px de superficie separan los dos tramos: el hueco separa, no un borde. */
+    const hDesc = Math.max(hTot - hCon - (f.con && f.total > f.con ? 2 : 0), 0);
+    if (f.total > f.con) {
+      g.appendChild(el("path", {
+        d: pathBarra(x, yTot, ancho, hDesc, 4, "arriba"), fill: "var(--none)", class: "bar",
+      }));
+    }
+    if (f.con) {
+      const redondeado = f.con === f.total;
+      g.appendChild(el("path", {
+        d: pathBarra(x, mT + util - hCon, ancho, Math.max(hCon, 2), redondeado ? 4 : 0, "arriba"),
+        fill: "var(--c1)", class: "bar",
+      }));
+    }
+
+    /* Area de golpe generosa: cubre toda la banda, no solo la barra. */
+    const golpe = el("rect", {
+      x: mI + i * banda, y: mT, width: banda, height: util, fill: "transparent",
+    });
+    g.appendChild(golpe);
+
+    const resumen = "<b>Promoción " + f.anio + "</b><br>" + f.total + " egresados<br>"
+      + '<span class="t-sub">' + f.con + " con evidencia · " + f1(pct(f.con, f.total)) + "% de cobertura</span>"
+      + '<br><span class="t-sub">Clic para ' + (activo ? "quitar el filtro" : "filtrar esta promoción") + "</span>";
+    conTooltip(g, resumen);
+    hacerClicable(g, (activo ? "Quitar filtro " : "Filtrar por promoción ") + f.anio,
+      () => alternar("anio", f.anio));
+
+    cols.appendChild(g);
+
+    const et = el("text", { x: x + ancho / 2, y: H - mB + 20, "text-anchor": "middle", class: "tick" });
+    et.textContent = f.anio;
+    svg.appendChild(et);
+
+    if (rotular.has(i)) {
+      const p = el("text", {
+        x: x + ancho / 2, y: yTot - 9, "text-anchor": "middle",
+        class: i === iMax ? "vlab-b" : "vlab",
+      });
+      p.textContent = f1(cob[i]) + "%";
+      svg.appendChild(p);
+    }
+  });
+}
+
+/* Barra apilada al 100%. El redondeo vive en los extremos de la pista:
+   un segmento interior no tiene extremo de dato que redondear. */
+function barraApilada(svgId, legId, filas, kEt, kVal, colores, orden) {
+  const svg = document.getElementById(svgId);
+  const leg = document.getElementById(legId);
+  const total = filas.reduce((s, f) => s + f[kVal], 0);
+  if (!total) { vacio(svgId); if (leg) leg.replaceChildren(); return; }
+
+  const ord = orden
+    ? orden.map((e) => filas.find((f) => f[kEt] === e)).filter(Boolean)
+    : filas;
+  const W = 440, alto = 38, cid = "pista-" + svgId;
+  svg.setAttribute("viewBox", "0 0 " + W + " " + alto);
+  svg.removeAttribute("width"); svg.removeAttribute("height");
+  svg.replaceChildren();
+
+  const defs = el("defs");
+  const cp = el("clipPath", { id: cid });
+  cp.appendChild(el("rect", { x: 0, y: 0, width: W, height: alto, rx: 6, ry: 6 }));
+  defs.appendChild(cp);
+  svg.appendChild(defs);
+
+  const g = el("g", { "clip-path": "url(#" + cid + ")" });
+  svg.appendChild(g);
+
+  let x = 0;
+  ord.forEach((f, i) => {
+    const w = (f[kVal] / total) * W;
+    const color = Array.isArray(colores) ? colores[i] : (colores[f[kEt]] || "var(--none)");
+    const r = el("rect", {
+      x, y: 0, width: Math.max(w - 2, 1), height: alto, fill: color, class: "bar seg",
+    });
+    r.style.animationDelay = (i * 60) + "ms";
+    g.appendChild(r);
+    conTooltip(r, "<b>" + etiq(f[kEt]) + "</b><br>" + f[kVal] + " egresados<br>"
+      + '<span class="t-sub">' + f1(pct(f[kVal], total)) + "% del total</span>");
+    x += w;
+  });
+
+  if (leg) {
+    leg.replaceChildren();
+    ord.forEach((f, i) => {
+      const color = Array.isArray(colores) ? colores[i] : (colores[f[kEt]] || "var(--none)");
+      const s = document.createElement("span");
+      s.innerHTML = '<i class="swatch" style="background:' + color + '"></i>' + etiq(f[kEt]) + ' &middot; <b>' + f[kVal] + '</b>';
+      leg.appendChild(s);
+    });
+  }
+}
+
+/* ================= tarjetas ================= */
+function construirTiles() {
+  $("#tiles").innerHTML =
+    '<div class="tile hero">'
+    + '<div class="lbl">Cobertura de información</div>'
+    + '<div class="val" id="kv-cob">0%</div>'
+    + '<div class="hero-meter"><span id="kv-meter" style="width:0"></span></div>'
+    + '<div class="note" id="kn-cob"></div>'
+    + '</div>'
+    + '<div class="tile"><div class="lbl">Egresados</div><div class="val" id="kv-uni">0</div>'
+    + '<div class="note" id="kn-uni"></div></div>'
+    + '<div class="tile"><div class="lbl">Con evidencia laboral</div><div class="val" id="kv-ev">0</div>'
+    + '<div class="note">empleo verificado en fuente pública</div></div>'
+    + '<div class="tile"><div class="lbl">Sin información</div><div class="val" id="kv-sin">0%</div>'
+    + '<div class="note">situación laboral desconocida</div></div>';
+}
+
+function actualizarTiles(universo, conEv, cobertura, hayFiltro) {
+  const entero = (v) => String(Math.round(v));
+  const porc = (v) => f1(v) + "%";
+  animarNumero($("#kv-cob"), cobertura, porc);
+  animarNumero($("#kv-uni"), universo, entero);
+  animarNumero($("#kv-ev"), conEv, entero);
+  animarNumero($("#kv-sin"), 100 - cobertura, porc);
+  $("#kv-meter").style.width = f1(cobertura) + "%";
+  $("#kn-cob").textContent = conEv + " de " + universo
+    + " con situación laboral verificable en fuente pública";
+  $("#kn-uni").textContent = hayFiltro ? "en la selección actual" : "marco censal 2017–2024";
+}
+
+/* ================= agregacion ================= */
+const cuenta = (filas, campo, filtro) => {
+  const m = new Map();
+  filas.forEach((f) => {
+    if (filtro && !filtro(f)) return;
+    const k = f[campo];
+    if (k === "" || k == null) return;
+    m.set(k, (m.get(k) || 0) + 1);
+  });
+  return [...m].map(([k, n]) => ({ [campo]: k, n })).sort((a, b) => b.n - a.n);
+};
+
+/* ================= estado de filtros ================= */
+const F = { anios: new Set(), sectores: new Set() };
+const PILLS = { anio: new Map(), sector: new Map() };
+const REDUCIDO = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Punto unico de verdad: lo mismo da pulsar la pildora o la barra. */
+function alternar(tipo, valor) {
+  const conjunto = tipo === "anio" ? F.anios : F.sectores;
+  conjunto.has(valor) ? conjunto.delete(valor) : conjunto.add(valor);
+  const b = PILLS[tipo].get(valor);
+  if (b) b.setAttribute("aria-pressed", conjunto.has(valor));
+  refrescar();
+}
+
+function aplicaFiltros(filas) {
+  return filas.filter((f) =>
+    (!F.anios.size || F.anios.has(f.anio_grado)) &&
+    (!F.sectores.size || (f.tiene_evidencia_empleo === 1 && F.sectores.has(f.sector))));
+}
+
+function construirFiltros(filas) {
+  const anios = [...new Set(filas.map((f) => f.anio_grado))].sort();
+  const sectores = [...new Set(filas.filter((f) => f.tiene_evidencia_empleo === 1)
+    .map((f) => f.sector))].sort();
+
+  const pintar = (cont, valores, tipo) => {
+    cont.replaceChildren();
+    PILLS[tipo].clear();
+    valores.forEach((v) => {
+      const b = document.createElement("button");
+      b.className = "pill"; b.type = "button";
+      b.textContent = etiq(String(v));
+      b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", () => alternar(tipo, v));
+      PILLS[tipo].set(v, b);
+      cont.appendChild(b);
+    });
+  };
+  pintar($("#f-anio"), anios, "anio");
+  pintar($("#f-sector"), sectores, "sector");
+
+  $("#reset").addEventListener("click", () => {
+    F.anios.clear(); F.sectores.clear();
+    document.querySelectorAll(".pill").forEach((p) => p.setAttribute("aria-pressed", "false"));
+    refrescar();
+  });
+}
+
+/* ================= render ================= */
+function refrescar() {
+  const todas = DATOS.filas;
+  const d = aplicaFiltros(todas);
+  const hayFiltro = F.anios.size || F.sectores.size;
+  $("#reset").hidden = !hayFiltro;
+
+  const universo = d.length;
+  const conEv = d.filter((f) => f.tiene_evidencia_empleo === 1).length;
+  const cobertura = pct(conEv, universo);
+
+  $("#nbadge").innerHTML = hayFiltro
+    ? `Mostrando <b>${universo}</b> de ${todas.length} egresados`
+    : `Universo completo &middot; <b>${todas.length}</b> egresados`;
+
+  actualizarTiles(universo, conEv, cobertura, hayFiltro);
+
+  /* --- por año --- */
+  const porAnio = [...new Set(d.map((f) => f.anio_grado))].sort().map((a) => {
+    const g = d.filter((f) => f.anio_grado === a);
+    return { anio: a, total: g.length, con: g.filter((f) => f.tiene_evidencia_empleo === 1).length };
+  });
+  barrasAnio("c-anio", porAnio);
+  $("#n-anio").textContent = `n = ${universo}`;
+  tabla($("#t-anio"), [
+    { t: "Promoción", v: (f) => f.anio },
+    { t: "Egresados", v: (f) => f.total, num: true },
+    { t: "Con evidencia", v: (f) => f.con, num: true },
+    { t: "Cobertura", v: (f) => f1(pct(f.con, f.total)) + "%", num: true },
+  ], porAnio);
+
+  /* --- estado de evidencia --- */
+  const porEstado = cuenta(d, "estado_evidencia");
+  barraApilada("c-estado", "l-estado", porEstado, "estado_evidencia", "n", COLOR_ESTADO, ORDEN_ESTADO);
+  $("#n-estado").textContent = `n = ${universo}`;
+  tabla($("#t-estado"), [
+    { t: "Estado", v: (f) => etiq(f.estado_evidencia) },
+    { t: "n", v: (f) => f.n, num: true },
+    { t: "%", v: (f) => f1(pct(f.n, universo)) + "%", num: true },
+  ], porEstado);
+
+  /* --- sector --- */
+  const porSector = cuenta(d, "sector", (f) => f.tiene_evidencia_empleo === 1);
+  barrasH("c-sector", porSector, "sector", "n", COLOR_SECTOR, conEv,
+          { tipo: "sector", conjunto: "sectores" });
+  $("#n-sector").textContent = `n = ${conEv}`;
+  tabla($("#t-sector"), [
+    { t: "Sector", v: (f) => etiq(f.sector) },
+    { t: "n", v: (f) => f.n, num: true },
+  ], porSector);
+
+  /* --- geografia --- */
+  const porGeo = cuenta(d, "ambito", (f) => f.tiene_evidencia_empleo === 1);
+  const ordenGeo = ["Tacna", "Lima", "No determinado"];
+  barraApilada("c-geo", "l-geo", porGeo, "ambito", "n", COLOR_GEO, ordenGeo);
+  const ubic = porGeo.filter((f) => f.ambito !== "No determinado").reduce((s, f) => s + f.n, 0);
+  $("#n-geo").textContent = `${ubic} de ${conEv} ubicables`;
+  tabla($("#t-geo"), [
+    { t: "Ámbito", v: (f) => etiq(f.ambito) },
+    { t: "n", v: (f) => f.n, num: true },
+  ], porGeo);
+
+  /* --- area --- */
+  const porArea = cuenta(d, "area", (f) => f.tiene_evidencia_empleo === 1 && f.area !== "No determinada");
+  barrasH("c-area", porArea, "area", "n", COLOR_AREA);
+  const nArea = porArea.reduce((s, f) => s + f.n, 0);
+  $("#n-area").textContent = `n = ${nArea}`;
+  tabla($("#t-area"), [
+    { t: "Área", v: (f) => etiq(f.area) },
+    { t: "n", v: (f) => f.n, num: true },
+  ], porArea);
+
+  /* --- empleadores --- */
+  const porEmp = cuenta(d, "empleador").filter((f) => f.n >= 2);
+  barrasH("c-emp", porEmp, "empleador", "n", null);
+  $("#n-emp").textContent = porEmp.length ? `${porEmp.length} empleadores` : "";
+  tabla($("#t-emp"), [
+    { t: "Empleador", v: (f) => f.empleador },
+    { t: "n", v: (f) => f.n, num: true },
+  ], porEmp);
+
+  /* --- confianza --- */
+  const conf = cuenta(d, "nivel_confianza", (f) => f.tiene_evidencia_empleo === 1);
+  const totalConf = conf.reduce((s, f) => s + f.n, 0);
+  const colConf = { Alta: "var(--c1)", Media: "var(--o2)", Baja: "var(--o3)" };
+  $("#n-conf").textContent = `n = ${totalConf}`;
+  $("#confianza").innerHTML = totalConf
+    ? ["Alta", "Media", "Baja"].map((k) => {
+        const f = conf.find((c) => c.nivel_confianza === k);
+        if (!f) return "";
+        return `<div class="meter">
+          <span class="mlab">${k}</span>
+          <span class="mtrack"><span class="mfill" style="width:${f1(pct(f.n, totalConf))}%;background:${colConf[k]}"></span></span>
+          <span class="mval">${f.n}</span>
+        </div>`;
+      }).join("")
+    : '<p class="vacio">Sin datos para este filtro.</p>';
+
+  /* --- afinidad para la nota --- */
+  const conCargo = d.filter((f) => f.es_afin !== null && f.es_afin !== "");
+  const afines = conCargo.filter((f) => Number(f.es_afin) === 1).length;
+
+  $("#nota-lista").innerHTML = [
+    `<b>Universo.</b> ${todas.length} egresados únicos. La nómina oficial lista 145 registros; se excluyen los segundos grados para no contar dos veces a la misma persona.`,
+    `<b>Cobertura, no empleabilidad.</b> La cobertura mide qué porcentaje del universo tiene situación laboral verificable. Los casos sin información no son desempleados: son invisibles a la fuente.`,
+    `<b>Afinidad formativa.</b> ${afines} de ${conCargo.length} casos con cargo identificable corresponden a áreas afines (${f1(pct(afines, conCargo.length))}%). Cuando la fuente declara empresa pero no cargo, la afinidad se registra como desconocida, nunca como negativa.`,
+    `<b>Ubicación.</b> Solo se declara cuando es verificable desde el empleador: el topónimo está en el nombre, la entidad tiene sede única conocida, o la fuente la consigna como empleador local. Inferir la ubicación de una persona desde el alcance nacional de su empresa sería inventar.`,
+    `<b>Tiempo de inserción.</b> Sin datos. Las fuentes públicas no exponen fecha de inicio laboral; este indicador requiere encuesta directa.`,
+    `<b>Supresión.</b> Los cruces de filtros con menos de ${DATOS._meta.umbral_supresion} casos deben leerse con cautela: en cohortes pequeñas, combinar año, sector y ubicación puede aislar a un individuo.`,
+  ].map((t) => `<li>${t}</li>`).join("");
+}
+
+function iniciar() {
+  const todas = DATOS.filas;
+  $("#chips").innerHTML = [
+    `Universo: <b>${todas.length}</b> egresados`,
+    `Promociones <b>2017–2024</b>`,
+    `Corte: <b>setiembre 2026</b>`,
+  ].map((t) => `<span class="chip">${t}</span>`).join("");
+
+  const conEv = todas.filter((f) => f.tiene_evidencia_empleo === 1).length;
+  $("#aviso-txt").textContent =
+    `La cobertura indica qué porcentaje de los egresados tiene situación laboral verificable `
+    + `en fuentes públicas. NO es una tasa de empleabilidad: los ${todas.length - conEv} egresados `
+    + `restantes no son desempleados, son casos sin información. La empleabilidad real y el tiempo `
+    + `de inserción no son estimables sin encuesta directa.`;
+
+  construirFiltros(todas);
+  construirTiles();
+  refrescar();
+
+  /* El grafico de columnas se dibuja a medida real: hay que redibujarlo
+     cuando el panel cambia de ancho, o la tipografia quedaria escalada. */
+  let pendiente = 0;
+  new ResizeObserver(() => {
+    clearTimeout(pendiente);
+    pendiente = setTimeout(refrescar, 120);
+  }).observe(document.querySelector("#c-anio").parentElement);
+}
+
+document.querySelectorAll(".tbl-toggle").forEach((b) => {
+  b.addEventListener("click", () => {
+    const t = document.getElementById(b.dataset.tbl);
+    t.hidden = !t.hidden;
+    b.textContent = t.hidden ? "Ver tabla" : "Ocultar tabla";
+  });
+});
+
+$("#theme").addEventListener("click", () => {
+  const actual = document.documentElement.getAttribute("data-theme");
+  const oscuro = actual ? actual === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme", oscuro ? "light" : "dark");
+});
+
+if (DATOS) iniciar();
+</script>
+</body>
+</html>

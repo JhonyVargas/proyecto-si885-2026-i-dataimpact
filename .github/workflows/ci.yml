@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pruebas:
+    name: Tests y pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Suite de tests
+        run: PYTHONPATH=src python -m pytest tests -q
+
+      - name: Verificar que no se filtraron datos personales
+        run: |
+          if git ls-files | grep -q '^data/raw/[^.]'; then
+            echo "ERROR: hay archivos versionados en data/raw/"
+            git ls-files data/raw/
+            exit 1
+          fi
+          echo "OK: data/raw/ no contiene archivos versionados"
+
+      - name: Reconstruir el modelo desde la semilla
+        run: |
+          PYTHONPATH=src python -m empleabilidad.modelo
+          PYTHONPATH=src python -m empleabilidad.kpis
+          PYTHONPATH=src python -m empleabilidad.tablero
+
+      - name: Publicar el tablero como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: tablero
+          path: dashboard/index.html
