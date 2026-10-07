@@ -20,7 +20,7 @@ Curso: **SI885 — Inteligencia de Negocios** (2026-I)
 ![HTML5](https://img.shields.io/badge/HTML5-tablero-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS](https://img.shields.io/badge/CSS-tema_claro/oscuro-1572B6?style=flat&logo=css&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-sin_dependencias-F7DF1E?style=flat&logo=javascript&logoColor=black)
-![pytest](https://img.shields.io/badge/pytest-19_pruebas-0A9EDC?style=flat&logo=pytest&logoColor=white)
+![pytest](https://img.shields.io/badge/pytest-31_pruebas-0A9EDC?style=flat&logo=pytest&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI-2088FF?style=flat&logo=githubactions&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-control_de_versiones-F05032?style=flat&logo=git&logoColor=white)
 ![Markdown](https://img.shields.io/badge/Markdown-docs-000000?style=flat&logo=markdown&logoColor=white)
@@ -92,7 +92,7 @@ data/seed/          semilla seudonimizada   ← versionable
     ▼
 data/marts/         data mart dimensional
     │
-    ├─ kpis.py      indicadores + supresión
+    ├─ kpis.py      indicadores agregados (sin registros individuales)
     ▼
 dashboard/          tablero estático, sin dependencias
 ```
@@ -103,7 +103,7 @@ dashboard/          tablero estático, sin dependencias
 |---|---|
 | **DuckDB**, no PostgreSQL | 139 filas y cargas semestrales. Un motor cliente-servidor aporta complejidad operativa sin beneficio. El almacén es un archivo: se versiona, se copia, sobrevive al egreso del equipo. |
 | **Tablero estático** | Sin build, sin servidor, sin licencias. Publicable en GitHub Pages o en cualquier hosting estático, sin costo ni mantenimiento. |
-| **Datos embebidos** en el HTML | Funciona desde `file://`, en Pages y en cualquier hosting estático. |
+| **Datos embebidos** en el HTML | Funciona desde `file://`, en Pages y en cualquier hosting estático. Solo viajan totales agregados, nunca registros individuales. |
 | **Clasificación curada** | Con 35 registros, una tabla explícita y auditable es preferible a una heurística. Cada decisión es revisable en un diff. |
 
 Ver `docs/adr/` para el registro completo.
@@ -140,14 +140,20 @@ reporta sobre su denominador real: los casos con cargo identificable.
 no un puesto. Contarlas como empleo es lo que eleva artificialmente la cifra.
 Hay un test que protege esta distinción.
 
-**3. Celdas pequeñas.** Los cortes por sector y área con menos de 5 casos se
-marcan como suprimidos, y el tablero advierte que los cruces de filtros con
-pocos casos deben leerse con cautela. Con cohortes de ~20 personas, combinar
-año, sector y ubicación puede aislar a un individuo: agregar no es anonimizar.
+**3. Celdas pequeñas.** Con cohortes de 6 a 32 personas, cruzar la promoción
+con el empleador, el sector o la ubicación puede aislar a un individuo: agregar
+no es anonimizar. Por eso el tablero recibe solo totales:
 
-> **Pendiente.** El tablero todavía embebe los registros individuales
-> seudonimizados y no oculta los cortes pequeños. Ver la sección de riesgos del
-> FD04.
+- Por promoción se publica únicamente la cobertura (estado de la evidencia).
+- La ubicación, el perfil laboral, los empleadores, la confiabilidad y la
+  afinidad se publican para el conjunto de las promociones, sin cruzarlos con
+  el año.
+- En sector y área, las categorías con menos de 5 egresados se suman en
+  «Otros», sin revelar cuáles son. Lo no determinado nunca se agrupa.
+- Los empleadores se nombran solo si reúnen a 2 o más egresados.
+
+Los tests de `tests/test_kpis.py` verifican sobre el JSON publicado que no viaje
+ningún seudónimo ni cruce de promoción con atributos laborales.
 
 ---
 
@@ -164,6 +170,8 @@ La nómina contiene nombres reales de 141 personas. El repositorio es público.
 - El seudónimo es **determinista**: la misma persona produce el mismo
   identificador entre oleadas de encuesta, lo que permite seguir trayectorias
   sin re-identificar.
+- El tablero público **no contiene registros individuales ni seudónimos**: solo
+  totales agregados, con las reglas de la sección anterior.
 
 Marco: Ley N.° 29733, Ley de Protección de Datos Personales.
 
@@ -177,6 +185,7 @@ Marco: Ley N.° 29733, Ley de Protección de Datos Personales.
 | Egresados por promoción | ✅ | Nómina oficial |
 | Sector del empleador | ✅ | Clasificación curada |
 | Área de desempeño | ✅ | Solo casos con cargo declarado |
+| Afinidad formativa | ✅ | Solo casos con cargo declarado |
 | Concentración de empleadores | ✅ | Clasificación curada |
 | **Tiempo de inserción laboral** | ❌ | **Requiere encuesta** |
 | Tasa de empleabilidad real | ❌ | **Requiere encuesta** |
@@ -207,7 +216,7 @@ src/empleabilidad/
   clasificacion.py   reglas curadas de empleador, cargo, sector y área
   ingest.py          contrato de datos y seudonimización
   modelo.py          construcción del modelo estrella
-  kpis.py            indicadores y supresión
+  kpis.py            indicadores agregados y agrupación de celdas pequeñas
   tablero.py         render del HTML
 sql/             modelo dimensional
 tests/           suite de tests

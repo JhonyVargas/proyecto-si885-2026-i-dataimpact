@@ -151,6 +151,14 @@
   .aviso strong { display: block; margin-bottom: .3rem; font-size: 13px; color: var(--ink); }
   .aviso p { margin: 0; color: var(--ink-2); font-size: 12.5px; line-height: 1.55; max-width: 92ch; }
 
+  /* Visible solo con filtro: explica por que el perfil laboral no cambia. */
+  .aviso-filtro {
+    margin: 1rem 0 0; padding: .6rem .9rem; max-width: 110ch;
+    font-size: 12px; line-height: 1.5; color: var(--ink-2);
+    background: var(--raised); border: 1px solid var(--grid);
+    border-left: 3px solid var(--accent); border-radius: 0 var(--r) var(--r) 0;
+  }
+
   /* ========== Filtros: una sola fila, encima de todo lo que afecta ========= */
   .filtros {
     position: sticky; top: 0; z-index: 10;
@@ -215,6 +223,10 @@
     margin-top: .55rem; letter-spacing: -.035em;
   }
   .tile .note { font-size: 12px; color: var(--ink-2); margin-top: auto; padding-top: .55rem; line-height: 1.45; }
+  /* Comparacion en gris y sin flechas: mas cobertura no es un logro ni una
+     caida, es mas o menos informacion publica. */
+  .tile .cmp { font-size: 12px; color: var(--ink-2); margin-top: .75rem; line-height: 1.45; font-variant-numeric: tabular-nums; }
+  .tile .cmp b { color: var(--ink); font-weight: 620; }
 
   /* Una sola cifra protagonista por vista. */
   .tile.hero { border-color: color-mix(in srgb, var(--c1) 32%, var(--grid)); }
@@ -238,7 +250,7 @@
     border-radius: var(--r-card); padding: 1.4rem; box-shadow: var(--shadow);
     display: flex; flex-direction: column; min-width: 0;
   }
-  .phead { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+  .phead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .35rem 1rem; }
   .panel h2 { margin: 0; font-size: 14px; font-weight: 620; letter-spacing: -.012em; }
   .pn {
     font-size: 11px; color: var(--muted); white-space: nowrap;
@@ -367,8 +379,6 @@
   .hrow { transition: opacity .15s; }
   .hlist:hover .hrow { opacity: .45; }
   .hlist .hrow:hover { opacity: 1; }
-  .hrow.on .hlab { color: var(--ink); font-weight: 600; }
-  .hrow.on .hval { color: var(--accent); }
 </style>
 </head>
 <body>
@@ -408,10 +418,6 @@
       <span class="flabel">Promoción</span>
       <div class="pills" id="f-anio"></div>
     </div>
-    <div class="fgroup">
-      <span class="flabel">Sector</span>
-      <div class="pills" id="f-sector"></div>
-    </div>
     <button class="reset" id="reset" type="button" hidden>Limpiar filtros</button>
     <span class="nbadge" id="nbadge"></span>
   </div>
@@ -419,6 +425,11 @@
 
 <div class="wrap">
   <section class="tiles" id="tiles"></section>
+  <p class="aviso-filtro" id="aviso-filtro" hidden>
+    El filtro de promoción cambia la cobertura y el estado de la evidencia. La ubicación, el
+    perfil laboral, los empleadores, la confiabilidad y la afinidad se muestran siempre para
+    <b>todas las promociones</b>: cruzarlos con el año podría identificar a un egresado.
+  </p>
 
   <div class="band"><h2>Cobertura del seguimiento</h2></div>
   <div class="grid g-72">
@@ -471,7 +482,7 @@
         <h2>Sector del empleador</h2>
         <span class="pn" id="n-sector"></span>
       </div>
-      <p class="cap">Distribución de los egresados con empleo verificado.</p>
+      <p class="cap" id="cap-sector">Distribución de los egresados con empleo verificado.</p>
       <div id="c-sector"></div>
       <button class="tbl-toggle" data-tbl="t-sector">Ver tabla</button>
       <div class="tbl-wrap" id="t-sector" hidden></div>
@@ -482,7 +493,7 @@
         <h2>Área de desempeño</h2>
         <span class="pn" id="n-area"></span>
       </div>
-      <p class="cap">Solo los casos en que la fuente declara el cargo, no solo la empresa.</p>
+      <p class="cap" id="cap-area">Solo los casos en que la fuente declara el cargo, no solo la empresa.</p>
       <div id="c-area"></div>
       <button class="tbl-toggle" data-tbl="t-area">Ver tabla</button>
       <div class="tbl-wrap" id="t-area" hidden></div>
@@ -522,7 +533,7 @@
 
   <footer>
     <p><b>Fuente maestra:</b> nómina oficial de bachilleres publicada por la EPIS&ndash;UPT (2017&ndash;2024), contrastada con perfiles públicos de LinkedIn. Corte: setiembre 2026.</p>
-    <p><b>Privacidad:</b> construido sobre identificadores seudonimizados. No se publica ningún dato personal identificable (Ley N.&deg; 29733).</p>
+    <p><b>Privacidad:</b> este tablero contiene solo totales agregados: ningún registro individual, seudónimo ni dato personal identificable (Ley N.&deg; 29733).</p>
     <p><b>Reproducibilidad:</b> generado por el pipeline del proyecto. Cada ejecución reconstruye este tablero desde la nómina cruda.</p>
   </footer>
 </div>
@@ -530,7 +541,7 @@
 <div id="tip" role="status" aria-live="polite"></div>
 
 <script>
-const DATOS = {"universo": [{"egresados_unicos": 139}], "cobertura_global": [{"universo": 139, "con_evidencia": 35, "pct_cobertura": 25.2}], "estado_evidencia": [{"estado_evidencia": "Sin informacion", "n": 87, "pct": 62.6}, {"estado_evidencia": "Empleo verificado", "n": 35, "pct": 25.2}, {"estado_evidencia": "No confirmado", "n": 10, "pct": 7.2}, {"estado_evidencia": "Sin evidencia laboral", "n": 7, "pct": 5.0}], "por_anio": [{"anio_grado": 2017, "egresados": 6, "con_evidencia": 1, "pct_cobertura": 16.7}, {"anio_grado": 2018, "egresados": 13, "con_evidencia": 2, "pct_cobertura": 15.4}, {"anio_grado": 2019, "egresados": 20, "con_evidencia": 3, "pct_cobertura": 15.0}, {"anio_grado": 2020, "egresados": 8, "con_evidencia": 2, "pct_cobertura": 25.0}, {"anio_grado": 2021, "egresados": 27, "con_evidencia": 9, "pct_cobertura": 33.3}, {"anio_grado": 2022, "egresados": 7, "con_evidencia": 2, "pct_cobertura": 28.6}, {"anio_grado": 2023, "egresados": 32, "con_evidencia": 9, "pct_cobertura": 28.1}, {"anio_grado": 2024, "egresados": 26, "con_evidencia": 7, "pct_cobertura": 26.9}], "por_sector": [{"sector": "TI / Consultoria", "n": 14}, {"sector": "No determinado", "n": 8}, {"sector": "Educacion", "n": 5}, {"sector": "Financiero", "n": 3, "suprimido": true}, {"sector": "Publico", "n": 2, "suprimido": true}, {"sector": "Mineria", "n": 1, "suprimido": true}, {"sector": "Servicios", "n": 1, "suprimido": true}, {"sector": "Independiente", "n": 1, "suprimido": true}], "por_area": [{"area": "Desarrollo de Software", "n": 8}, {"area": "Infraestructura y Soporte", "n": 2, "suprimido": true}, {"area": "Datos / BI / IA", "n": 1, "suprimido": true}, {"area": "Docencia", "n": 1, "suprimido": true}], "top_empleadores": [{"empleador": "Data Consulting", "sector": "TI / Consultoria", "n": 4}, {"empleador": "Universidad Privada de Tacna", "sector": "Educacion", "n": 3}, {"empleador": "NTT DATA", "sector": "TI / Consultoria", "n": 2}], "afinidad": [{"cargo_conocido": 12, "afines": 11, "pct_afinidad": 91.7}], "confianza": [{"nivel_confianza": "Media", "n": 21}, {"nivel_confianza": "Alta", "n": 14}], "calidad_datos": [{"sin_clasificar": 0, "sin_area": 0, "con_tiempo_insercion": 0}], "filas": [{"sk_egresado": "EG-0B8997DA10", "anio_grado": 2017, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1947D3F94D", "anio_grado": 2017, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-3533805FD4", "anio_grado": 2017, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-551AC1C3D5", "anio_grado": 2017, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Cibergestion", "area": "No determinada"}, {"sk_egresado": "EG-8CF6CC21EF", "anio_grado": 2017, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-C88029AE87", "anio_grado": 2017, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-0353271214", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-0CB1C35F80", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1C6889898B", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-39DE53BAEC", "anio_grado": 2018, "estado_evidencia": "Empleo verificado", "sector": "Educacion", "ambito": "Tacna", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Universidad Privada de Tacna", "area": "No determinada"}, {"sk_egresado": "EG-43BDB5B91D", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-51AD19D705", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-60B5A78924", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-7C5B4E5813", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-7DF9A0125B", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-A67E54E4BD", "anio_grado": 2018, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "Tacna", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Data Consulting", "area": "No determinada"}, {"sk_egresado": "EG-B8A4E0FF20", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-B9422E137C", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-FB2D2BC3F8", "anio_grado": 2018, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1002710DA0", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-131C061D54", "anio_grado": 2019, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1656574CF2", "anio_grado": 2019, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-16F0E91185", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-3C6EAB59BD", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-3FA8F2A754", "anio_grado": 2019, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-6E9601AB25", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-9A81FA18DF", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-9AAD75DD58", "anio_grado": 2019, "estado_evidencia": "Empleo verificado", "sector": "Servicios", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Prosegur", "area": "No determinada"}, {"sk_egresado": "EG-A9120F197D", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-AA6F47DC78", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-B5361B7DD1", "anio_grado": 2019, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Vurbis Interactive", "area": "No determinada"}, {"sk_egresado": "EG-B8DC548431", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-BD2DF7ACB4", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-C11DF4A69E", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-C7B197500C", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-CB6FE60A42", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-E3F6B85C6A", "anio_grado": 2019, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-F2A5BD25E5", "anio_grado": 2019, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-FAACE1202D", "anio_grado": 2019, "estado_evidencia": "Empleo verificado", "sector": "Financiero", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Caja Cencosud Scotiabank", "area": "No determinada"}, {"sk_egresado": "EG-26998344B9", "anio_grado": 2020, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-3C10EA3328", "anio_grado": 2020, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-4E604E4126", "anio_grado": 2020, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-6826420266", "anio_grado": 2020, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-771AF33E8D", "anio_grado": 2020, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-9B17171D46", "anio_grado": 2020, "estado_evidencia": "Empleo verificado", "sector": "Publico", "ambito": "Tacna", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Municipalidad Distrital de Ilabaya", "area": "No determinada"}, {"sk_egresado": "EG-B14D1A340A", "anio_grado": 2020, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "INCOTEC - Innovacion Eficiente", "area": "No determinada"}, {"sk_egresado": "EG-DC02B20015", "anio_grado": 2020, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-0F9CDB9526", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1411AD1A54", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-15ED9F6096", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-17BCFD78AE", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-2C23355D34", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-2C34108027", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-36B24217D4", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-3852501E50", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Ensolvers", "area": "No determinada"}, {"sk_egresado": "EG-3A37A4BAEB", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Datos / BI / IA"}, {"sk_egresado": "EG-3DAB8BDCFD", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "Lima", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "NTT DATA", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-3E5D1F9568", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "Independiente", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "Freelance", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-566C1E95C8", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-5ECC57AE45", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-83AC3FED8B", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Infraestructura y Soporte"}, {"sk_egresado": "EG-8AF0A75F27", "anio_grado": 2021, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-A2C0F87A94", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-B96958E67B", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-C7E16A9851", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-C9014732C9", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "Educacion", "ambito": "Tacna", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Universidad Privada de Tacna", "area": "No determinada"}, {"sk_egresado": "EG-C9C05167BB", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-D9E21EE39F", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "CCITEC Ingenieria y Tecnologia", "area": "No determinada"}, {"sk_egresado": "EG-E1D0DD81D0", "anio_grado": 2021, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-EBF9914996", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-ED410A5326", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-F0B041AE31", "anio_grado": 2021, "estado_evidencia": "Empleo verificado", "sector": "Financiero", "ambito": "Lima", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "Banco Falabella", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-FAF71DF7D6", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-FBED05C59C", "anio_grado": 2021, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-0E63489FA9", "anio_grado": 2022, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "Tsoft", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-7382C6E0C0", "anio_grado": 2022, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-7980998DA4", "anio_grado": 2022, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-7A015288CF", "anio_grado": 2022, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-99C4C43371", "anio_grado": 2022, "estado_evidencia": "Empleo verificado", "sector": "Educacion", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 0, "empleador": "Instituto Superior John von Neumann", "area": "Docencia"}, {"sk_egresado": "EG-CBB2227D6E", "anio_grado": 2022, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-E84519C45F", "anio_grado": 2022, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-04FBD82CB2", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "Educacion", "ambito": "Tacna", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Universidad Privada de Tacna", "area": "No determinada"}, {"sk_egresado": "EG-0CAFA4FF84", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-0E82EB82B2", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-129AF970D9", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1324F181D6", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-1AC3BB7D06", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-258591F6EE", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-25A0D03681", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Infraestructura y Soporte"}, {"sk_egresado": "EG-283F6853B4", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "NAVITRACK", "area": "No determinada"}, {"sk_egresado": "EG-3879374EFD", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-409CE8AE28", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-4115B4DCEE", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-415E148C7C", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-635FFA8914", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-70A468B4FC", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "Mineria", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Southern Peru Copper Corporation", "area": "No determinada"}, {"sk_egresado": "EG-7C5BE1792D", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-8112A448EC", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-8F7603A0BB", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-9683EADE5E", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-968E839B16", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-9DF331FBA7", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-9F6832B2DA", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-A3506D1055", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "GLADCON GROUP", "area": "No determinada"}, {"sk_egresado": "EG-A9F516D85B", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-AD27571EA9", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-C2B3CCA695", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-CABDEFF75B", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-E5C89B4395", "anio_grado": 2023, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-E7C8AC145E", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-F2E8917FD8", "anio_grado": 2023, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-F852DF2F79", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "Tacna", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Data Consulting", "area": "No determinada"}, {"sk_egresado": "EG-FF649DC763", "anio_grado": 2023, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "Lima", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "NTT DATA", "area": "No determinada"}, {"sk_egresado": "EG-1F3789DFE6", "anio_grado": 2024, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-2987B17DDE", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-2D6926F300", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "Publico", "ambito": "Tacna", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Municipalidad Distrital Gregorio Albarracin Lanchipa", "area": "No determinada"}, {"sk_egresado": "EG-349CFE8FCD", "anio_grado": 2024, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-380622745F", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-39F6AADA5F", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "Tacna", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Data Consulting", "area": "No determinada"}, {"sk_egresado": "EG-4221E499E6", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-55F7312F3C", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Servicios y Software del Sur S.A.C.", "area": "No determinada"}, {"sk_egresado": "EG-58242F5D1E", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-5EA301C221", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-5EC185C2A7", "anio_grado": 2024, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-6A05CAB511", "anio_grado": 2024, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-6E586FA554", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-7189B82C7C", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "Financiero", "ambito": "Tacna", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Caja Tacna", "area": "No determinada"}, {"sk_egresado": "EG-7AD5F513A2", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-8EB7A6382C", "anio_grado": 2024, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-A0ABB3DDFD", "anio_grado": 2024, "estado_evidencia": "Sin evidencia laboral", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-A10B1A3944", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-A20E2B3976", "anio_grado": 2024, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Alta", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-B019B61D5D", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-B38A4C012E", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": 1, "empleador": "", "area": "Desarrollo de Software"}, {"sk_egresado": "EG-BDE79965F6", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "Educacion", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "CAPSUR - Corporacion Capacitadora del Sur", "area": "No determinada"}, {"sk_egresado": "EG-C23FBE4775", "anio_grado": 2024, "estado_evidencia": "Empleo verificado", "sector": "TI / Consultoria", "ambito": "Tacna", "nivel_confianza": "Media", "tiene_evidencia_empleo": 1, "es_afin": null, "empleador": "Data Consulting", "area": "No determinada"}, {"sk_egresado": "EG-CE6D3F71BC", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-DC6B4BF7FC", "anio_grado": 2024, "estado_evidencia": "No confirmado", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Media", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}, {"sk_egresado": "EG-EB2BAF8019", "anio_grado": 2024, "estado_evidencia": "Sin informacion", "sector": "No determinado", "ambito": "No determinado", "nivel_confianza": "Sin fuente", "tiene_evidencia_empleo": 0, "es_afin": null, "empleador": "", "area": "No determinada"}], "_meta": {"umbral_supresion": 5, "advertencia": "pct_cobertura NO es tasa de empleabilidad. Mide que porcentaje del universo tiene situacion laboral verificable en fuentes publicas. La empleabilidad real no es estimable con estos datos."}};
+const DATOS = {"universo": [{"egresados_unicos": 139}], "cobertura_global": [{"universo": 139, "con_evidencia": 35, "pct_cobertura": 25.2}], "estado_evidencia": [{"estado_evidencia": "Sin informacion", "n": 87, "pct": 62.6}, {"estado_evidencia": "Empleo verificado", "n": 35, "pct": 25.2}, {"estado_evidencia": "No confirmado", "n": 10, "pct": 7.2}, {"estado_evidencia": "Sin evidencia laboral", "n": 7, "pct": 5.0}], "por_anio": [{"anio_grado": 2017, "egresados": 6, "con_evidencia": 1, "pct_cobertura": 16.7}, {"anio_grado": 2018, "egresados": 13, "con_evidencia": 2, "pct_cobertura": 15.4}, {"anio_grado": 2019, "egresados": 20, "con_evidencia": 3, "pct_cobertura": 15.0}, {"anio_grado": 2020, "egresados": 8, "con_evidencia": 2, "pct_cobertura": 25.0}, {"anio_grado": 2021, "egresados": 27, "con_evidencia": 9, "pct_cobertura": 33.3}, {"anio_grado": 2022, "egresados": 7, "con_evidencia": 2, "pct_cobertura": 28.6}, {"anio_grado": 2023, "egresados": 32, "con_evidencia": 9, "pct_cobertura": 28.1}, {"anio_grado": 2024, "egresados": 26, "con_evidencia": 7, "pct_cobertura": 26.9}], "por_anio_estado": [{"anio_grado": 2017, "estado_evidencia": "Empleo verificado", "n": 1}, {"anio_grado": 2017, "estado_evidencia": "Sin informacion", "n": 5}, {"anio_grado": 2018, "estado_evidencia": "Empleo verificado", "n": 2}, {"anio_grado": 2018, "estado_evidencia": "Sin informacion", "n": 11}, {"anio_grado": 2019, "estado_evidencia": "Empleo verificado", "n": 3}, {"anio_grado": 2019, "estado_evidencia": "No confirmado", "n": 4}, {"anio_grado": 2019, "estado_evidencia": "Sin informacion", "n": 13}, {"anio_grado": 2020, "estado_evidencia": "Empleo verificado", "n": 2}, {"anio_grado": 2020, "estado_evidencia": "No confirmado", "n": 1}, {"anio_grado": 2020, "estado_evidencia": "Sin informacion", "n": 5}, {"anio_grado": 2021, "estado_evidencia": "Empleo verificado", "n": 9}, {"anio_grado": 2021, "estado_evidencia": "No confirmado", "n": 2}, {"anio_grado": 2021, "estado_evidencia": "Sin informacion", "n": 16}, {"anio_grado": 2022, "estado_evidencia": "Empleo verificado", "n": 2}, {"anio_grado": 2022, "estado_evidencia": "Sin evidencia laboral", "n": 1}, {"anio_grado": 2022, "estado_evidencia": "Sin informacion", "n": 4}, {"anio_grado": 2023, "estado_evidencia": "Empleo verificado", "n": 9}, {"anio_grado": 2023, "estado_evidencia": "Sin evidencia laboral", "n": 1}, {"anio_grado": 2023, "estado_evidencia": "Sin informacion", "n": 22}, {"anio_grado": 2024, "estado_evidencia": "Empleo verificado", "n": 7}, {"anio_grado": 2024, "estado_evidencia": "No confirmado", "n": 3}, {"anio_grado": 2024, "estado_evidencia": "Sin evidencia laboral", "n": 5}, {"anio_grado": 2024, "estado_evidencia": "Sin informacion", "n": 11}], "nomina": [{"registros": 141, "segundos_grados": 2}], "por_sector": [{"sector": "TI / Consultoria", "n": 14}, {"sector": "Educacion", "n": 5}, {"sector": "Otros sectores", "n": 8, "agrupa": 5}, {"sector": "No determinado", "n": 8}], "por_area": [{"area": "Desarrollo de Software", "n": 8}, {"area": "Otras areas", "n": 4, "agrupa": 3}], "por_ambito": [{"ambito": "No determinado", "n": 22}, {"ambito": "Tacna", "n": 10}, {"ambito": "Lima", "n": 3}], "top_empleadores": [{"empleador": "Data Consulting", "n": 4}, {"empleador": "Universidad Privada de Tacna", "n": 3}, {"empleador": "NTT DATA", "n": 2}], "afinidad": [{"cargo_conocido": 12, "afines": 11, "pct_afinidad": 91.7}], "confianza": [{"nivel_confianza": "Media", "n": 21}, {"nivel_confianza": "Alta", "n": 14}], "calidad_datos": [{"sin_clasificar": 0, "sin_area": 0, "con_tiempo_insercion": 0}], "_meta": {"umbral_supresion": 5, "advertencia": "pct_cobertura NO es tasa de empleabilidad. Mide que porcentaje del universo tiene situacion laboral verificable en fuentes publicas. La empleabilidad real no es estimable con estos datos."}};
 
 /* ================= utilidades ================= */
 const $ = (s) => document.querySelector(s);
@@ -552,6 +563,7 @@ const ETIQ = {
   "Mineria": "Minería",
   "TI / Consultoria": "TI / Consultoría",
   "Gestion de Proyectos": "Gestión de Proyectos",
+  "Otras areas": "Otras áreas",
 };
 const etiq = (t) => ETIQ[t] ?? t;
 
@@ -565,6 +577,7 @@ const COLOR_SECTOR = {
   "Servicios":        "var(--c5)",
   "Mineria":          "var(--c6)",
   "Independiente":    "var(--c7)",
+  "Otros sectores":   "var(--muted)",
   "No determinado":   "var(--none)",
 };
 const COLOR_AREA = {
@@ -573,6 +586,7 @@ const COLOR_AREA = {
   "Infraestructura y Soporte": "var(--c4)",
   "Gestion de Proyectos":      "var(--c7)",
   "Docencia":                  "var(--c2)",
+  "Otras areas":               "var(--muted)",
 };
 const COLOR_GEO = {
   "Tacna":          "var(--c1)",
@@ -580,7 +594,14 @@ const COLOR_GEO = {
   "No determinado": "var(--none)",
 };
 const ORDEN_ESTADO = ["Empleo verificado", "No confirmado", "Sin evidencia laboral", "Sin informacion"];
-const COLOR_ESTADO = ["var(--o1)", "var(--o2)", "var(--o3)", "var(--none)"];
+/* Por entidad, no por posicion: casi todas las promociones carecen de algun
+   estado, y un color por posicion pintaria de azul la falta de informacion. */
+const COLOR_ESTADO = {
+  "Empleo verificado":     "var(--o1)",
+  "No confirmado":         "var(--o2)",
+  "Sin evidencia laboral": "var(--o3)",
+  "Sin informacion":       "var(--none)",
+};
 
 /* ================= tooltip ================= */
 const tip = $("#tip");
@@ -682,10 +703,10 @@ function hacerClicable(nodo, etiqueta, accion) {
 
 /* Barras horizontales en HTML, no SVG: el texto conserva su tamano real
    cualquiera sea el ancho del panel, cosa que un viewBox escalado no permite. */
-function barrasH(contId, filas, kEt, kVal, mapaColor, total, filtro) {
+function barrasH(contId, filas, kEt, kVal, mapaColor, total) {
   const cont = document.getElementById(contId);
   if (!filas.length) {
-    cont.innerHTML = '<p class="vacio">Sin datos para este filtro.</p>';
+    cont.innerHTML = '<p class="vacio">Sin datos para mostrar.</p>';
     return;
   }
   const max = Math.max(...filas.map((f) => f[kVal]), 1);
@@ -694,9 +715,8 @@ function barrasH(contId, filas, kEt, kVal, mapaColor, total, filtro) {
 
   filas.forEach((f) => {
     const color = mapaColor ? (mapaColor[f[kEt]] || "var(--none)") : "var(--c1)";
-    const activo = filtro && F[filtro.conjunto].has(f[kEt]);
     const fila = document.createElement("div");
-    fila.className = "hrow" + (activo ? " on" : "");
+    fila.className = "hrow";
     fila.innerHTML = '<span class="hlab" title="' + etiq(f[kEt]) + '">' + etiq(f[kEt]) + '</span>'
       + '<span class="htrack"><span class="hfill" style="width:0;background:' + color + '"></span></span>'
       + '<span class="hval">' + f[kVal] + '</span>';
@@ -709,12 +729,8 @@ function barrasH(contId, filas, kEt, kVal, mapaColor, total, filtro) {
     conTooltip(fila.querySelector(".htrack"),
       "<b>" + etiq(f[kEt]) + "</b><br>" + f[kVal] + " egresado" + (f[kVal] === 1 ? "" : "s")
       + (total ? '<br><span class="t-sub">' + f1(pct(f[kVal], total)) + "% del total mostrado</span>" : "")
-      + (filtro ? '<br><span class="t-sub">Clic para ' + (activo ? "quitar el filtro" : "filtrar") + "</span>" : ""));
-
-    if (filtro) {
-      hacerClicable(fila, (activo ? "Quitar filtro " : "Filtrar por ") + etiq(f[kEt]),
-        () => alternar(filtro.tipo, f[kEt]));
-    }
+      + (f.agrupa ? '<br><span class="t-sub">Suma ' + f.agrupa + " categoría" + (f.agrupa === 1 ? "" : "s")
+        + " con menos de " + UMBRAL + " egresados cada una</span>" : ""));
   });
   cont.replaceChildren(lista);
 }
@@ -790,7 +806,7 @@ function barrasAnio(svgId, filas) {
       + '<br><span class="t-sub">Clic para ' + (activo ? "quitar el filtro" : "filtrar esta promoción") + "</span>";
     conTooltip(g, resumen);
     hacerClicable(g, (activo ? "Quitar filtro " : "Filtrar por promoción ") + f.anio,
-      () => alternar("anio", f.anio));
+      () => alternar(f.anio));
 
     cols.appendChild(g);
 
@@ -817,9 +833,13 @@ function barraApilada(svgId, legId, filas, kEt, kVal, colores, orden) {
   const total = filas.reduce((s, f) => s + f[kVal], 0);
   if (!total) { vacio(svgId); if (leg) leg.replaceChildren(); return; }
 
+  /* Primero el orden conocido; una categoria imprevista va al final en vez de
+     desaparecer, para que la barra siga sumando el total. */
   const ord = orden
-    ? orden.map((e) => filas.find((f) => f[kEt] === e)).filter(Boolean)
+    ? [...orden.map((e) => filas.find((f) => f[kEt] === e)).filter(Boolean),
+       ...filas.filter((f) => !orden.includes(f[kEt]))]
     : filas;
+  const colorDe = (f) => colores[f[kEt]] || "var(--none)";
   const W = 440, alto = 38, cid = "pista-" + svgId;
   svg.setAttribute("viewBox", "0 0 " + W + " " + alto);
   svg.removeAttribute("width"); svg.removeAttribute("height");
@@ -837,7 +857,7 @@ function barraApilada(svgId, legId, filas, kEt, kVal, colores, orden) {
   let x = 0;
   ord.forEach((f, i) => {
     const w = (f[kVal] / total) * W;
-    const color = Array.isArray(colores) ? colores[i] : (colores[f[kEt]] || "var(--none)");
+    const color = colorDe(f);
     const r = el("rect", {
       x, y: 0, width: Math.max(w - 2, 1), height: alto, fill: color, class: "bar seg",
     });
@@ -851,12 +871,41 @@ function barraApilada(svgId, legId, filas, kEt, kVal, colores, orden) {
   if (leg) {
     leg.replaceChildren();
     ord.forEach((f, i) => {
-      const color = Array.isArray(colores) ? colores[i] : (colores[f[kEt]] || "var(--none)");
+      const color = colorDe(f);
       const s = document.createElement("span");
       s.innerHTML = '<i class="swatch" style="background:' + color + '"></i>' + etiq(f[kEt]) + ' &middot; <b>' + f[kVal] + '</b>';
       leg.appendChild(s);
     });
   }
+}
+
+/* ================= datos publicados =================
+   El tablero recibe solo agregados (ver kpis.py): por promocion, conteos de
+   cobertura; el perfil laboral, ya totalizado para todas las promociones. */
+const VERIFICADO = "Empleo verificado";
+let UMBRAL = 5, ANIOS = [], TOTAL = 0, CON_EV = 0;
+
+/* Suma los conteos de cobertura de las promociones indicadas. */
+function cortePorAnios(anios) {
+  const porAnio = anios.map((a) => ({ anio: a, total: 0, con: 0 }));
+  const idx = new Map(porAnio.map((f) => [f.anio, f]));
+  const estados = new Map();
+  DATOS.por_anio_estado.forEach((f) => {
+    const fa = idx.get(f.anio_grado);
+    if (!fa) return;
+    fa.total += f.n;
+    if (f.estado_evidencia === VERIFICADO) fa.con += f.n;
+    estados.set(f.estado_evidencia, (estados.get(f.estado_evidencia) || 0) + f.n);
+  });
+  const porEstado = [...estados]
+    .map(([estado_evidencia, n]) => ({ estado_evidencia, n }))
+    .sort((a, b) => b.n - a.n || a.estado_evidencia.localeCompare(b.estado_evidencia));
+  return {
+    porAnio,
+    porEstado,
+    universo: porAnio.reduce((s, f) => s + f.total, 0),
+    conEv: porAnio.reduce((s, f) => s + f.con, 0),
+  };
 }
 
 /* ================= tarjetas ================= */
@@ -866,175 +915,166 @@ function construirTiles() {
     + '<div class="lbl">Cobertura de información</div>'
     + '<div class="val" id="kv-cob">0%</div>'
     + '<div class="hero-meter"><span id="kv-meter" style="width:0"></span></div>'
+    + '<div class="cmp" id="kc-cob" title="Diferencia en puntos porcentuales (pp). Más cobertura '
+    + 'significa más egresados con información pública, no más empleo."></div>'
     + '<div class="note" id="kn-cob"></div>'
     + '</div>'
     + '<div class="tile"><div class="lbl">Egresados</div><div class="val" id="kv-uni">0</div>'
     + '<div class="note" id="kn-uni"></div></div>'
     + '<div class="tile"><div class="lbl">Con evidencia laboral</div><div class="val" id="kv-ev">0</div>'
     + '<div class="note">empleo verificado en fuente pública</div></div>'
-    + '<div class="tile"><div class="lbl">Sin información</div><div class="val" id="kv-sin">0%</div>'
-    + '<div class="note">situación laboral desconocida</div></div>';
+    + '<div class="tile"><div class="lbl">Afinidad formativa</div><div class="val" id="kv-afi">0%</div>'
+    + '<div class="note" id="kn-afi"></div></div>';
 }
 
-function actualizarTiles(universo, conEv, cobertura, hayFiltro) {
+/* "Este periodo frente a los anteriores", pero en puntos porcentuales:
+   26.9% frente a 24.8% son 2.1 pp, no un "+8.7%" que exagera. La diferencia
+   se calcula sobre las cifras ya redondeadas, para que el lector la verifique. */
+function comparacion(seleccion, hayFiltro) {
+  const resto = ANIOS.filter((a) => !seleccion.includes(a));
+  let a, b, etA, etB;
+  if (hayFiltro && resto.length) {
+    a = cortePorAnios(seleccion); b = cortePorAnios(resto);
+    etA = "Selección"; etB = "resto de promociones";
+  } else {
+    if (ANIOS.length < 2) return "";
+    const ult = ANIOS[ANIOS.length - 1], previas = ANIOS.slice(0, -1);
+    a = cortePorAnios([ult]); b = cortePorAnios(previas);
+    etA = "Promoción " + ult; etB = previas[0] + "–" + previas[previas.length - 1];
+  }
+  const r1 = (x) => Math.round(x * 10) / 10;
+  const ca = r1(pct(a.conEv, a.universo)), cb = r1(pct(b.conEv, b.universo));
+  const d = r1(ca - cb);
+  const dif = d === 0 ? "sin diferencia" : (d > 0 ? "+" : "−") + f1(Math.abs(d)) + " pp";
+  return `${etA}: <b>${f1(ca)}%</b> · ${etB}: <b>${f1(cb)}%</b> (${dif})`;
+}
+
+function notaAfinidad(hayFiltro) {
+  const a = DATOS.afinidad[0];
+  if (a.cargo_conocido < UMBRAL) return `menos de ${UMBRAL} casos con cargo identificable`;
+  return `${a.afines} de ${a.cargo_conocido} con cargo identificable`
+    + (hayFiltro ? " · todas las promociones" : "");
+}
+
+function actualizarTiles(c, seleccion, hayFiltro) {
   const entero = (v) => String(Math.round(v));
   const porc = (v) => f1(v) + "%";
+  const cobertura = pct(c.conEv, c.universo);
   animarNumero($("#kv-cob"), cobertura, porc);
-  animarNumero($("#kv-uni"), universo, entero);
-  animarNumero($("#kv-ev"), conEv, entero);
-  animarNumero($("#kv-sin"), 100 - cobertura, porc);
+  animarNumero($("#kv-uni"), c.universo, entero);
+  animarNumero($("#kv-ev"), c.conEv, entero);
   $("#kv-meter").style.width = f1(cobertura) + "%";
-  $("#kn-cob").textContent = conEv + " de " + universo
-    + " con situación laboral verificable en fuente pública";
-  $("#kn-uni").textContent = hayFiltro ? "en la selección actual" : "marco censal 2017–2024";
+  $("#kc-cob").innerHTML = comparacion(seleccion, hayFiltro);
+  $("#kn-cob").textContent = `${c.conEv} de ${c.universo} con situación laboral verificable; `
+    + `${f1(100 - cobertura)}% sin información`;
+  $("#kn-uni").textContent = hayFiltro
+    ? "en la selección actual"
+    : `marco censal ${ANIOS[0]}–${ANIOS[ANIOS.length - 1]}`;
+  $("#kn-afi").textContent = notaAfinidad(hayFiltro);
 }
 
-/* ================= agregacion ================= */
-const cuenta = (filas, campo, filtro) => {
-  const m = new Map();
-  filas.forEach((f) => {
-    if (filtro && !filtro(f)) return;
-    const k = f[campo];
-    if (k === "" || k == null) return;
-    m.set(k, (m.get(k) || 0) + 1);
-  });
-  return [...m].map(([k, n]) => ({ [campo]: k, n })).sort((a, b) => b.n - a.n);
-};
-
 /* ================= estado de filtros ================= */
-const F = { anios: new Set(), sectores: new Set() };
-const PILLS = { anio: new Map(), sector: new Map() };
+const F = { anios: new Set() };
+const PILLS = new Map();
 const REDUCIDO = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* Punto unico de verdad: lo mismo da pulsar la pildora o la barra. */
-function alternar(tipo, valor) {
-  const conjunto = tipo === "anio" ? F.anios : F.sectores;
-  conjunto.has(valor) ? conjunto.delete(valor) : conjunto.add(valor);
-  const b = PILLS[tipo].get(valor);
-  if (b) b.setAttribute("aria-pressed", conjunto.has(valor));
+function alternar(anio) {
+  F.anios.has(anio) ? F.anios.delete(anio) : F.anios.add(anio);
+  const b = PILLS.get(anio);
+  if (b) b.setAttribute("aria-pressed", F.anios.has(anio));
   refrescar();
 }
 
-function aplicaFiltros(filas) {
-  return filas.filter((f) =>
-    (!F.anios.size || F.anios.has(f.anio_grado)) &&
-    (!F.sectores.size || (f.tiene_evidencia_empleo === 1 && F.sectores.has(f.sector))));
-}
-
-function construirFiltros(filas) {
-  const anios = [...new Set(filas.map((f) => f.anio_grado))].sort();
-  const sectores = [...new Set(filas.filter((f) => f.tiene_evidencia_empleo === 1)
-    .map((f) => f.sector))].sort();
-
-  const pintar = (cont, valores, tipo) => {
-    cont.replaceChildren();
-    PILLS[tipo].clear();
-    valores.forEach((v) => {
-      const b = document.createElement("button");
-      b.className = "pill"; b.type = "button";
-      b.textContent = etiq(String(v));
-      b.setAttribute("aria-pressed", "false");
-      b.addEventListener("click", () => alternar(tipo, v));
-      PILLS[tipo].set(v, b);
-      cont.appendChild(b);
-    });
-  };
-  pintar($("#f-anio"), anios, "anio");
-  pintar($("#f-sector"), sectores, "sector");
+function construirFiltros() {
+  const cont = $("#f-anio");
+  cont.replaceChildren();
+  PILLS.clear();
+  ANIOS.forEach((a) => {
+    const b = document.createElement("button");
+    b.className = "pill"; b.type = "button";
+    b.textContent = String(a);
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => alternar(a));
+    PILLS.set(a, b);
+    cont.appendChild(b);
+  });
 
   $("#reset").addEventListener("click", () => {
-    F.anios.clear(); F.sectores.clear();
-    document.querySelectorAll(".pill").forEach((p) => p.setAttribute("aria-pressed", "false"));
+    F.anios.clear();
+    PILLS.forEach((p) => p.setAttribute("aria-pressed", "false"));
     refrescar();
   });
 }
 
-/* ================= render ================= */
-function refrescar() {
-  const todas = DATOS.filas;
-  const d = aplicaFiltros(todas);
-  const hayFiltro = F.anios.size || F.sectores.size;
-  $("#reset").hidden = !hayFiltro;
+/* ========== perfil laboral: siempre todas las promociones ==========
+   Se dibuja una sola vez. Con filtro, solo cambia la etiqueta de cada panel. */
+const PN_GLOBAL = new Map();
 
-  const universo = d.length;
-  const conEv = d.filter((f) => f.tiene_evidencia_empleo === 1).length;
-  const cobertura = pct(conEv, universo);
+function pnGlobal(id, texto) {
+  PN_GLOBAL.set(id, texto);
+  $("#" + id).textContent = texto;
+}
 
-  $("#nbadge").innerHTML = hayFiltro
-    ? `Mostrando <b>${universo}</b> de ${todas.length} egresados`
-    : `Universo completo &middot; <b>${todas.length}</b> egresados`;
-
-  actualizarTiles(universo, conEv, cobertura, hayFiltro);
-
-  /* --- por año --- */
-  const porAnio = [...new Set(d.map((f) => f.anio_grado))].sort().map((a) => {
-    const g = d.filter((f) => f.anio_grado === a);
-    return { anio: a, total: g.length, con: g.filter((f) => f.tiene_evidencia_empleo === 1).length };
+function marcarGlobales(hayFiltro) {
+  PN_GLOBAL.forEach((texto, id) => {
+    $("#" + id).textContent = !hayFiltro ? texto
+      : texto ? "Todas las promociones · " + texto : "Todas las promociones";
   });
-  barrasAnio("c-anio", porAnio);
-  $("#n-anio").textContent = `n = ${universo}`;
-  tabla($("#t-anio"), [
-    { t: "Promoción", v: (f) => f.anio },
-    { t: "Egresados", v: (f) => f.total, num: true },
-    { t: "Con evidencia", v: (f) => f.con, num: true },
-    { t: "Cobertura", v: (f) => f1(pct(f.con, f.total)) + "%", num: true },
-  ], porAnio);
+}
 
-  /* --- estado de evidencia --- */
-  const porEstado = cuenta(d, "estado_evidencia");
-  barraApilada("c-estado", "l-estado", porEstado, "estado_evidencia", "n", COLOR_ESTADO, ORDEN_ESTADO);
-  $("#n-estado").textContent = `n = ${universo}`;
-  tabla($("#t-estado"), [
-    { t: "Estado", v: (f) => etiq(f.estado_evidencia) },
-    { t: "n", v: (f) => f.n, num: true },
-    { t: "%", v: (f) => f1(pct(f.n, universo)) + "%", num: true },
-  ], porEstado);
+function pintarAfinidad() {
+  const a = DATOS.afinidad[0];
+  if (a.cargo_conocido >= UMBRAL) animarNumero($("#kv-afi"), a.pct_afinidad, (v) => f1(v) + "%");
+  else $("#kv-afi").textContent = "—";
+}
 
-  /* --- sector --- */
-  const porSector = cuenta(d, "sector", (f) => f.tiene_evidencia_empleo === 1);
-  barrasH("c-sector", porSector, "sector", "n", COLOR_SECTOR, conEv,
-          { tipo: "sector", conjunto: "sectores" });
-  $("#n-sector").textContent = `n = ${conEv}`;
-  tabla($("#t-sector"), [
-    { t: "Sector", v: (f) => etiq(f.sector) },
-    { t: "n", v: (f) => f.n, num: true },
-  ], porSector);
-
+function pintarGlobales() {
   /* --- geografia --- */
-  const porGeo = cuenta(d, "ambito", (f) => f.tiene_evidencia_empleo === 1);
-  const ordenGeo = ["Tacna", "Lima", "No determinado"];
-  barraApilada("c-geo", "l-geo", porGeo, "ambito", "n", COLOR_GEO, ordenGeo);
-  const ubic = porGeo.filter((f) => f.ambito !== "No determinado").reduce((s, f) => s + f.n, 0);
-  $("#n-geo").textContent = `${ubic} de ${conEv} ubicables`;
+  barraApilada("c-geo", "l-geo", DATOS.por_ambito, "ambito", "n", COLOR_GEO,
+               ["Tacna", "Lima", "No determinado"]);
+  const ubic = DATOS.por_ambito.filter((f) => f.ambito !== "No determinado")
+    .reduce((s, f) => s + f.n, 0);
+  pnGlobal("n-geo", `${ubic} de ${CON_EV} ubicables`);
   tabla($("#t-geo"), [
     { t: "Ámbito", v: (f) => etiq(f.ambito) },
     { t: "n", v: (f) => f.n, num: true },
-  ], porGeo);
+  ], DATOS.por_ambito);
+
+  /* --- sector --- */
+  $("#cap-sector").textContent = "Distribución de los egresados con empleo verificado. "
+    + `Los sectores con menos de ${UMBRAL} egresados se suman en «Otros sectores».`;
+  barrasH("c-sector", DATOS.por_sector, "sector", "n", COLOR_SECTOR, CON_EV);
+  pnGlobal("n-sector", `n = ${CON_EV}`);
+  tabla($("#t-sector"), [
+    { t: "Sector", v: (f) => etiq(f.sector) + (f.agrupa ? ` (${f.agrupa} sectores)` : "") },
+    { t: "n", v: (f) => f.n, num: true },
+  ], DATOS.por_sector);
 
   /* --- area --- */
-  const porArea = cuenta(d, "area", (f) => f.tiene_evidencia_empleo === 1 && f.area !== "No determinada");
-  barrasH("c-area", porArea, "area", "n", COLOR_AREA);
-  const nArea = porArea.reduce((s, f) => s + f.n, 0);
-  $("#n-area").textContent = `n = ${nArea}`;
+  $("#cap-area").textContent = "Solo los casos en que la fuente declara el cargo, no solo la empresa. "
+    + `Las áreas con menos de ${UMBRAL} casos se suman en «Otras áreas».`;
+  barrasH("c-area", DATOS.por_area, "area", "n", COLOR_AREA);
+  pnGlobal("n-area", `n = ${DATOS.por_area.reduce((s, f) => s + f.n, 0)}`);
   tabla($("#t-area"), [
-    { t: "Área", v: (f) => etiq(f.area) },
+    { t: "Área", v: (f) => etiq(f.area) + (f.agrupa ? ` (${f.agrupa} áreas)` : "") },
     { t: "n", v: (f) => f.n, num: true },
-  ], porArea);
+  ], DATOS.por_area);
 
   /* --- empleadores --- */
-  const porEmp = cuenta(d, "empleador").filter((f) => f.n >= 2);
-  barrasH("c-emp", porEmp, "empleador", "n", null);
-  $("#n-emp").textContent = porEmp.length ? `${porEmp.length} empleadores` : "";
+  const emp = DATOS.top_empleadores;
+  barrasH("c-emp", emp, "empleador", "n", null);
+  pnGlobal("n-emp", emp.length ? `${emp.length} empleadores` : "");
   tabla($("#t-emp"), [
     { t: "Empleador", v: (f) => f.empleador },
     { t: "n", v: (f) => f.n, num: true },
-  ], porEmp);
+  ], emp);
 
   /* --- confianza --- */
-  const conf = cuenta(d, "nivel_confianza", (f) => f.tiene_evidencia_empleo === 1);
+  const conf = DATOS.confianza;
   const totalConf = conf.reduce((s, f) => s + f.n, 0);
   const colConf = { Alta: "var(--c1)", Media: "var(--o2)", Baja: "var(--o3)" };
-  $("#n-conf").textContent = `n = ${totalConf}`;
+  pnGlobal("n-conf", `n = ${totalConf}`);
   $("#confianza").innerHTML = totalConf
     ? ["Alta", "Media", "Baja"].map((k) => {
         const f = conf.find((c) => c.nivel_confianza === k);
@@ -1045,39 +1085,90 @@ function refrescar() {
           <span class="mval">${f.n}</span>
         </div>`;
       }).join("")
-    : '<p class="vacio">Sin datos para este filtro.</p>';
+    : '<p class="vacio">Sin datos para mostrar.</p>';
+}
 
-  /* --- afinidad para la nota --- */
-  const conCargo = d.filter((f) => f.es_afin !== null && f.es_afin !== "");
-  const afines = conCargo.filter((f) => Number(f.es_afin) === 1).length;
+/* ================= nota metodologica ================= */
+function pintarNota() {
+  const nom = DATOS.nomina[0];
+  const a = DATOS.afinidad[0];
+  const tamanos = ANIOS.map((y) => cortePorAnios([y]).universo);
+  const excluidos = nom.segundos_grados === 1
+    ? "se excluye el segundo grado"
+    : `se excluyen los ${nom.segundos_grados} segundos grados`;
 
   $("#nota-lista").innerHTML = [
-    `<b>Universo.</b> ${todas.length} egresados únicos. La nómina oficial lista 145 registros; se excluyen los segundos grados para no contar dos veces a la misma persona.`,
+    `<b>Universo.</b> ${TOTAL} egresados únicos. La nómina oficial lista ${nom.registros} registros; ${excluidos} para no contar dos veces a la misma persona.`,
     `<b>Cobertura, no empleabilidad.</b> La cobertura mide qué porcentaje del universo tiene situación laboral verificable. Los casos sin información no son desempleados: son invisibles a la fuente.`,
-    `<b>Afinidad formativa.</b> ${afines} de ${conCargo.length} casos con cargo identificable corresponden a áreas afines (${f1(pct(afines, conCargo.length))}%). Cuando la fuente declara empresa pero no cargo, la afinidad se registra como desconocida, nunca como negativa.`,
+    `<b>Comparación.</b> La línea bajo la cobertura compara, en puntos porcentuales (pp), la promoción más reciente con las anteriores, o la selección con el resto. Una diferencia positiva indica más egresados con información pública, no más empleo.`,
+    a.cargo_conocido >= UMBRAL
+      ? `<b>Afinidad formativa.</b> ${a.afines} de ${a.cargo_conocido} casos con cargo identificable corresponden a áreas afines (${f1(pct(a.afines, a.cargo_conocido))}%). Cuando la fuente declara empresa pero no cargo, la afinidad se registra como desconocida, nunca como negativa.`
+      : `<b>Afinidad formativa.</b> Menos de ${UMBRAL} casos con cargo identificable: no se publica el porcentaje.`,
     `<b>Ubicación.</b> Solo se declara cuando es verificable desde el empleador: el topónimo está en el nombre, la entidad tiene sede única conocida, o la fuente la consigna como empleador local. Inferir la ubicación de una persona desde el alcance nacional de su empresa sería inventar.`,
     `<b>Tiempo de inserción.</b> Sin datos. Las fuentes públicas no exponen fecha de inicio laboral; este indicador requiere encuesta directa.`,
-    `<b>Supresión.</b> Los cruces de filtros con menos de ${DATOS._meta.umbral_supresion} casos deben leerse con cautela: en cohortes pequeñas, combinar año, sector y ubicación puede aislar a un individuo.`,
+    `<b>Protección de identidad.</b> Este tablero contiene solo totales, ningún registro individual. Por promoción se publica únicamente la cobertura; la ubicación, el perfil laboral, los empleadores, la confiabilidad y la afinidad se muestran para el conjunto de las promociones, porque en cohortes de ${Math.min(...tamanos)} a ${Math.max(...tamanos)} personas cruzarlos con el año podría identificar a alguien. En sector y área, las categorías con menos de ${UMBRAL} egresados se suman en «Otros»; los empleadores se nombran solo si reúnen a 2 o más egresados.`,
   ].map((t) => `<li>${t}</li>`).join("");
 }
 
+/* ================= render ================= */
+function refrescar() {
+  const hayFiltro = F.anios.size > 0;
+  const seleccion = hayFiltro ? ANIOS.filter((a) => F.anios.has(a)) : ANIOS;
+  const c = cortePorAnios(seleccion);
+  $("#reset").hidden = !hayFiltro;
+  $("#aviso-filtro").hidden = !hayFiltro;
+
+  $("#nbadge").innerHTML = hayFiltro
+    ? `Mostrando <b>${c.universo}</b> de ${TOTAL} egresados`
+    : `Universo completo &middot; <b>${TOTAL}</b> egresados`;
+
+  actualizarTiles(c, seleccion, hayFiltro);
+  marcarGlobales(hayFiltro);
+
+  /* --- por año --- */
+  barrasAnio("c-anio", c.porAnio);
+  $("#n-anio").textContent = `n = ${c.universo}`;
+  tabla($("#t-anio"), [
+    { t: "Promoción", v: (f) => f.anio },
+    { t: "Egresados", v: (f) => f.total, num: true },
+    { t: "Con evidencia", v: (f) => f.con, num: true },
+    { t: "Cobertura", v: (f) => f1(pct(f.con, f.total)) + "%", num: true },
+  ], c.porAnio);
+
+  /* --- estado de evidencia --- */
+  barraApilada("c-estado", "l-estado", c.porEstado, "estado_evidencia", "n", COLOR_ESTADO, ORDEN_ESTADO);
+  $("#n-estado").textContent = `n = ${c.universo}`;
+  tabla($("#t-estado"), [
+    { t: "Estado", v: (f) => etiq(f.estado_evidencia) },
+    { t: "n", v: (f) => f.n, num: true },
+    { t: "%", v: (f) => f1(pct(f.n, c.universo)) + "%", num: true },
+  ], c.porEstado);
+}
+
 function iniciar() {
-  const todas = DATOS.filas;
+  const cob = DATOS.cobertura_global[0];
+  UMBRAL = DATOS._meta.umbral_supresion;
+  ANIOS = [...new Set(DATOS.por_anio_estado.map((f) => f.anio_grado))].sort((a, b) => a - b);
+  TOTAL = cob.universo;
+  CON_EV = cob.con_evidencia;
+
   $("#chips").innerHTML = [
-    `Universo: <b>${todas.length}</b> egresados`,
-    `Promociones <b>2017–2024</b>`,
+    `Universo: <b>${TOTAL}</b> egresados`,
+    `Promociones <b>${ANIOS[0]}–${ANIOS[ANIOS.length - 1]}</b>`,
     `Corte: <b>setiembre 2026</b>`,
   ].map((t) => `<span class="chip">${t}</span>`).join("");
 
-  const conEv = todas.filter((f) => f.tiene_evidencia_empleo === 1).length;
   $("#aviso-txt").textContent =
     `La cobertura indica qué porcentaje de los egresados tiene situación laboral verificable `
-    + `en fuentes públicas. NO es una tasa de empleabilidad: los ${todas.length - conEv} egresados `
+    + `en fuentes públicas. NO es una tasa de empleabilidad: los ${TOTAL - CON_EV} egresados `
     + `restantes no son desempleados, son casos sin información. La empleabilidad real y el tiempo `
     + `de inserción no son estimables sin encuesta directa.`;
 
-  construirFiltros(todas);
+  construirFiltros();
   construirTiles();
+  pintarAfinidad();
+  pintarGlobales();
+  pintarNota();
   refrescar();
 
   /* El grafico de columnas se dibuja a medida real: hay que redibujarlo

@@ -83,43 +83,146 @@
       "pct_cobertura": 26.9
     }
   ],
+  "por_anio_estado": [
+    {
+      "anio_grado": 2017,
+      "estado_evidencia": "Empleo verificado",
+      "n": 1
+    },
+    {
+      "anio_grado": 2017,
+      "estado_evidencia": "Sin informacion",
+      "n": 5
+    },
+    {
+      "anio_grado": 2018,
+      "estado_evidencia": "Empleo verificado",
+      "n": 2
+    },
+    {
+      "anio_grado": 2018,
+      "estado_evidencia": "Sin informacion",
+      "n": 11
+    },
+    {
+      "anio_grado": 2019,
+      "estado_evidencia": "Empleo verificado",
+      "n": 3
+    },
+    {
+      "anio_grado": 2019,
+      "estado_evidencia": "No confirmado",
+      "n": 4
+    },
+    {
+      "anio_grado": 2019,
+      "estado_evidencia": "Sin informacion",
+      "n": 13
+    },
+    {
+      "anio_grado": 2020,
+      "estado_evidencia": "Empleo verificado",
+      "n": 2
+    },
+    {
+      "anio_grado": 2020,
+      "estado_evidencia": "No confirmado",
+      "n": 1
+    },
+    {
+      "anio_grado": 2020,
+      "estado_evidencia": "Sin informacion",
+      "n": 5
+    },
+    {
+      "anio_grado": 2021,
+      "estado_evidencia": "Empleo verificado",
+      "n": 9
+    },
+    {
+      "anio_grado": 2021,
+      "estado_evidencia": "No confirmado",
+      "n": 2
+    },
+    {
+      "anio_grado": 2021,
+      "estado_evidencia": "Sin informacion",
+      "n": 16
+    },
+    {
+      "anio_grado": 2022,
+      "estado_evidencia": "Empleo verificado",
+      "n": 2
+    },
+    {
+      "anio_grado": 2022,
+      "estado_evidencia": "Sin evidencia laboral",
+      "n": 1
+    },
+    {
+      "anio_grado": 2022,
+      "estado_evidencia": "Sin informacion",
+      "n": 4
+    },
+    {
+      "anio_grado": 2023,
+      "estado_evidencia": "Empleo verificado",
+      "n": 9
+    },
+    {
+      "anio_grado": 2023,
+      "estado_evidencia": "Sin evidencia laboral",
+      "n": 1
+    },
+    {
+      "anio_grado": 2023,
+      "estado_evidencia": "Sin informacion",
+      "n": 22
+    },
+    {
+      "anio_grado": 2024,
+      "estado_evidencia": "Empleo verificado",
+      "n": 7
+    },
+    {
+      "anio_grado": 2024,
+      "estado_evidencia": "No confirmado",
+      "n": 3
+    },
+    {
+      "anio_grado": 2024,
+      "estado_evidencia": "Sin evidencia laboral",
+      "n": 5
+    },
+    {
+      "anio_grado": 2024,
+      "estado_evidencia": "Sin informacion",
+      "n": 11
+    }
+  ],
+  "nomina": [
+    {
+      "registros": 141,
+      "segundos_grados": 2
+    }
+  ],
   "por_sector": [
     {
       "sector": "TI / Consultoria",
       "n": 14
     },
     {
-      "sector": "No determinado",
-      "n": 8
-    },
-    {
       "sector": "Educacion",
       "n": 5
     },
     {
-      "sector": "Financiero",
-      "n": 3,
-      "suprimido": true
+      "sector": "Otros sectores",
+      "n": 8,
+      "agrupa": 5
     },
     {
-      "sector": "Publico",
-      "n": 2,
-      "suprimido": true
-    },
-    {
-      "sector": "Mineria",
-      "n": 1,
-      "suprimido": true
-    },
-    {
-      "sector": "Servicios",
-      "n": 1,
-      "suprimido": true
-    },
-    {
-      "sector": "Independiente",
-      "n": 1,
-      "suprimido": true
+      "sector": "No determinado",
+      "n": 8
     }
   ],
   "por_area": [
@@ -128,35 +231,36 @@
       "n": 8
     },
     {
-      "area": "Infraestructura y Soporte",
-      "n": 2,
-      "suprimido": true
+      "area": "Otras areas",
+      "n": 4,
+      "agrupa": 3
+    }
+  ],
+  "por_ambito": [
+    {
+      "ambito": "No determinado",
+      "n": 22
     },
     {
-      "area": "Datos / BI / IA",
-      "n": 1,
-      "suprimido": true
+      "ambito": "Tacna",
+      "n": 10
     },
     {
-      "area": "Docencia",
-      "n": 1,
-      "suprimido": true
+      "ambito": "Lima",
+      "n": 3
     }
   ],
   "top_empleadores": [
     {
       "empleador": "Data Consulting",
-      "sector": "TI / Consultoria",
       "n": 4
     },
     {
       "empleador": "Universidad Privada de Tacna",
-      "sector": "Educacion",
       "n": 3
     },
     {
       "empleador": "NTT DATA",
-      "sector": "TI / Consultoria",
       "n": 2
     }
   ],
@@ -182,1676 +286,6 @@
       "sin_clasificar": 0,
       "sin_area": 0,
       "con_tiempo_insercion": 0
-    }
-  ],
-  "filas": [
-    {
-      "sk_egresado": "EG-0B8997DA10",
-      "anio_grado": 2017,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1947D3F94D",
-      "anio_grado": 2017,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3533805FD4",
-      "anio_grado": 2017,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-551AC1C3D5",
-      "anio_grado": 2017,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Cibergestion",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-8CF6CC21EF",
-      "anio_grado": 2017,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C88029AE87",
-      "anio_grado": 2017,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-0353271214",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-0CB1C35F80",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1C6889898B",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-39DE53BAEC",
-      "anio_grado": 2018,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Educacion",
-      "ambito": "Tacna",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Universidad Privada de Tacna",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-43BDB5B91D",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-51AD19D705",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-60B5A78924",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7C5B4E5813",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7DF9A0125B",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A67E54E4BD",
-      "anio_grado": 2018,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "Tacna",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Data Consulting",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B8A4E0FF20",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B9422E137C",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-FB2D2BC3F8",
-      "anio_grado": 2018,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1002710DA0",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-131C061D54",
-      "anio_grado": 2019,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1656574CF2",
-      "anio_grado": 2019,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-16F0E91185",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3C6EAB59BD",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3FA8F2A754",
-      "anio_grado": 2019,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-6E9601AB25",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-9A81FA18DF",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-9AAD75DD58",
-      "anio_grado": 2019,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Servicios",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Prosegur",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A9120F197D",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-AA6F47DC78",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B5361B7DD1",
-      "anio_grado": 2019,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Vurbis Interactive",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B8DC548431",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-BD2DF7ACB4",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C11DF4A69E",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C7B197500C",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-CB6FE60A42",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-E3F6B85C6A",
-      "anio_grado": 2019,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-F2A5BD25E5",
-      "anio_grado": 2019,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-FAACE1202D",
-      "anio_grado": 2019,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Financiero",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Caja Cencosud Scotiabank",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-26998344B9",
-      "anio_grado": 2020,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3C10EA3328",
-      "anio_grado": 2020,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-4E604E4126",
-      "anio_grado": 2020,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-6826420266",
-      "anio_grado": 2020,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-771AF33E8D",
-      "anio_grado": 2020,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-9B17171D46",
-      "anio_grado": 2020,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Publico",
-      "ambito": "Tacna",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Municipalidad Distrital de Ilabaya",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B14D1A340A",
-      "anio_grado": 2020,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "INCOTEC - Innovacion Eficiente",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-DC02B20015",
-      "anio_grado": 2020,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-0F9CDB9526",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1411AD1A54",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-15ED9F6096",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-17BCFD78AE",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-2C23355D34",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-2C34108027",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-36B24217D4",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3852501E50",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Ensolvers",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3A37A4BAEB",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Datos / BI / IA"
-    },
-    {
-      "sk_egresado": "EG-3DAB8BDCFD",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "Lima",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "NTT DATA",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-3E5D1F9568",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Independiente",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "Freelance",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-566C1E95C8",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-5ECC57AE45",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-83AC3FED8B",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Infraestructura y Soporte"
-    },
-    {
-      "sk_egresado": "EG-8AF0A75F27",
-      "anio_grado": 2021,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A2C0F87A94",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B96958E67B",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C7E16A9851",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C9014732C9",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Educacion",
-      "ambito": "Tacna",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Universidad Privada de Tacna",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C9C05167BB",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-D9E21EE39F",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "CCITEC Ingenieria y Tecnologia",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-E1D0DD81D0",
-      "anio_grado": 2021,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-EBF9914996",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-ED410A5326",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-F0B041AE31",
-      "anio_grado": 2021,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Financiero",
-      "ambito": "Lima",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "Banco Falabella",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-FAF71DF7D6",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-FBED05C59C",
-      "anio_grado": 2021,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-0E63489FA9",
-      "anio_grado": 2022,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "Tsoft",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-7382C6E0C0",
-      "anio_grado": 2022,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7980998DA4",
-      "anio_grado": 2022,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7A015288CF",
-      "anio_grado": 2022,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-99C4C43371",
-      "anio_grado": 2022,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Educacion",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 0,
-      "empleador": "Instituto Superior John von Neumann",
-      "area": "Docencia"
-    },
-    {
-      "sk_egresado": "EG-CBB2227D6E",
-      "anio_grado": 2022,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-E84519C45F",
-      "anio_grado": 2022,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-04FBD82CB2",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Educacion",
-      "ambito": "Tacna",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Universidad Privada de Tacna",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-0CAFA4FF84",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-0E82EB82B2",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-129AF970D9",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1324F181D6",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1AC3BB7D06",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-258591F6EE",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-25A0D03681",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Infraestructura y Soporte"
-    },
-    {
-      "sk_egresado": "EG-283F6853B4",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "NAVITRACK",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-3879374EFD",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-409CE8AE28",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-4115B4DCEE",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-415E148C7C",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-635FFA8914",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-70A468B4FC",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Mineria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Southern Peru Copper Corporation",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7C5BE1792D",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-8112A448EC",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-8F7603A0BB",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-9683EADE5E",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-968E839B16",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-9DF331FBA7",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-9F6832B2DA",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A3506D1055",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "GLADCON GROUP",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A9F516D85B",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-AD27571EA9",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C2B3CCA695",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-CABDEFF75B",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-E5C89B4395",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-E7C8AC145E",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-F2E8917FD8",
-      "anio_grado": 2023,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-F852DF2F79",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "Tacna",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Data Consulting",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-FF649DC763",
-      "anio_grado": 2023,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "Lima",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "NTT DATA",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-1F3789DFE6",
-      "anio_grado": 2024,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-2987B17DDE",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-2D6926F300",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Publico",
-      "ambito": "Tacna",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Municipalidad Distrital Gregorio Albarracin Lanchipa",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-349CFE8FCD",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-380622745F",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-39F6AADA5F",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "Tacna",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Data Consulting",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-4221E499E6",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-55F7312F3C",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Servicios y Software del Sur S.A.C.",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-58242F5D1E",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-5EA301C221",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-5EC185C2A7",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-6A05CAB511",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-6E586FA554",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7189B82C7C",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Financiero",
-      "ambito": "Tacna",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Caja Tacna",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-7AD5F513A2",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-8EB7A6382C",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A0ABB3DDFD",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin evidencia laboral",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A10B1A3944",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-A20E2B3976",
-      "anio_grado": 2024,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Alta",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B019B61D5D",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-B38A4C012E",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": 1,
-      "empleador": "",
-      "area": "Desarrollo de Software"
-    },
-    {
-      "sk_egresado": "EG-BDE79965F6",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "Educacion",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "CAPSUR - Corporacion Capacitadora del Sur",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-C23FBE4775",
-      "anio_grado": 2024,
-      "estado_evidencia": "Empleo verificado",
-      "sector": "TI / Consultoria",
-      "ambito": "Tacna",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 1,
-      "es_afin": null,
-      "empleador": "Data Consulting",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-CE6D3F71BC",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-DC6B4BF7FC",
-      "anio_grado": 2024,
-      "estado_evidencia": "No confirmado",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Media",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
-    },
-    {
-      "sk_egresado": "EG-EB2BAF8019",
-      "anio_grado": 2024,
-      "estado_evidencia": "Sin informacion",
-      "sector": "No determinado",
-      "ambito": "No determinado",
-      "nivel_confianza": "Sin fuente",
-      "tiene_evidencia_empleo": 0,
-      "es_afin": null,
-      "empleador": "",
-      "area": "No determinada"
     }
   ],
   "_meta": {

@@ -11,6 +11,19 @@ INFORMACION: que porcentaje del universo tiene situacion laboral conocida.
 
 Confundir ambas cifras seria el error metodologico que invalidaria el estudio.
 Todo indicador derivado se reporta sobre su denominador explicito.
+
+Politica de publicacion
+-----------------------
+El JSON que se embebe en el tablero publico contiene SOLO agregados, nunca
+registros individuales:
+
+    por promocion   -> conteos de cobertura (estado de la evidencia)
+    perfil laboral  -> solo el total de promociones; en sector y area, las
+                       categorias con menos de UMBRAL_SUPRESION casos se
+                       agrupan en "Otros"
+
+Cruzar la promocion con el empleador, el sector o la ubicacion aislaria a
+personas concretas en cohortes de 6 a 32 egresados.
 """
 
 import json
@@ -27,6 +40,10 @@ SALIDA_JSON = RAIZ / "dashboard" / "datos.json"
 # de filtros puede aislar a un individuo. Por debajo de este n no se publica el
 # detalle. Practica estandar de control de divulgacion estadistica.
 UMBRAL_SUPRESION = 5
+
+# "No determinado" es ausencia de dato, no un atributo de la persona: no se
+# agrupa con categorias reales, para no mezclar lo desconocido con lo raro.
+SIN_DETERMINAR = {"No determinado", "No determinada"}
 
 CONSULTAS = {
     "universo": """
@@ -46,7 +63,7 @@ CONSULTAS = {
                ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 1) AS pct
         FROM fact_observacion_laboral
         GROUP BY estado_evidencia
-        ORDER BY n DESC
+        ORDER BY n DESC, estado_evidencia
     """,
     "por_anio": """
         SELECT
@@ -59,12 +76,26 @@ CONSULTAS = {
         GROUP BY anio_grado
         ORDER BY anio_grado
     """,
+    # Unico corte que se publica por promocion: dice cuanto se sabe de cada
+    # cohorte, no a que se dedica nadie. El tablero lo suma segun el filtro.
+    "por_anio_estado": """
+        SELECT anio_grado, estado_evidencia, COUNT(*) AS n
+        FROM fact_observacion_laboral
+        GROUP BY anio_grado, estado_evidencia
+        ORDER BY anio_grado, estado_evidencia
+    """,
+    "nomina": """
+        SELECT
+            COUNT(*)                                 AS registros,
+            COUNT(*) FILTER (WHERE es_segundo_grado) AS segundos_grados
+        FROM dim_egresado
+    """,
     "por_sector": """
         SELECT sector, COUNT(*) AS n
         FROM fact_observacion_laboral
         WHERE tiene_evidencia_empleo = 1
         GROUP BY sector
-        ORDER BY n DESC
+        ORDER BY n DESC, sector
     """,
     "por_area": """
         SELECT area, COUNT(*) AS n
@@ -72,13 +103,22 @@ CONSULTAS = {
         JOIN dim_area a USING (sk_area)
         WHERE tiene_evidencia_empleo = 1 AND area <> 'No determinada'
         GROUP BY area
-        ORDER BY n DESC
+        ORDER BY n DESC, area
     """,
+    "por_ambito": """
+        SELECT ambito, COUNT(*) AS n
+        FROM fact_observacion_laboral
+        WHERE tiene_evidencia_empleo = 1
+        GROUP BY ambito
+        ORDER BY n DESC, ambito
+    """,
+    # Sin el sector del empleador: el tablero no lo muestra, y publicarlo podria
+    # delatar un sector que el corte por sector agrupo en "Otros".
     "top_empleadores": """
-        SELECT e.nombre AS empleador, e.sector, COUNT(*) AS n
+        SELECT e.nombre AS empleador, COUNT(*) AS n
         FROM fact_observacion_laboral f
         JOIN dim_empleador e USING (sk_empleador)
-        GROUP BY e.nombre, e.sector
+        GROUP BY e.nombre
         HAVING COUNT(*) >= 2
         ORDER BY n DESC, empleador
     """,
@@ -96,7 +136,7 @@ CONSULTAS = {
         FROM fact_observacion_laboral
         WHERE tiene_evidencia_empleo = 1
         GROUP BY nivel_confianza
-        ORDER BY n DESC
+        ORDER BY n DESC, nivel_confianza
     """,
     "calidad_datos": """
         SELECT
@@ -116,6 +156,32 @@ def _filas(con, sql):
     return [dict(zip(cols, fila)) for fila in cur.fetchall()]
 
 
+def agrupar_menores(filas, clave, etiqueta, umbral=UMBRAL_SUPRESION):
+    """Suma en una sola fila `etiqueta` las categorias con menos de `umbral`
+    casos, sin revelar cuales son.
+
+    Un unico egresado en mineria, o dos en el sector publico, bastan para
+    reconocer a alguien en cohortes pequenas. Solo se publican por separado las
+    categorias que alcanzan el umbral; "No determinado" nunca se agrupa. Orden:
+    categorias visibles de mayor a menor, luego "Otros", luego lo no determinado.
+    """
+    visibles, sin_determinar = [], []
+    otros_n = otros_k = 0
+    for fila in filas:
+        if fila[clave] in SIN_DETERMINAR:
+            sin_determinar.append(fila)
+        elif fila["n"] >= umbral:
+            visibles.append(fila)
+        else:
+            otros_n += fila["n"]
+            otros_k += 1
+
+    resultado = sorted(visibles, key=lambda f: (-f["n"], f[clave]))
+    if otros_k:
+        resultado.append({clave: etiqueta, "n": otros_n, "agrupa": otros_k})
+    return resultado + sin_determinar
+
+
 def calcular():
     if not ALMACEN.exists():
         raise SystemExit("Falta el almacen. Corre primero: make modelo")
@@ -124,28 +190,10 @@ def calcular():
     resultados = {nombre: _filas(con, sql) for nombre, sql in CONSULTAS.items()}
     con.close()
 
-    # Supresion por celda pequena sobre los cortes publicables.
-    for corte in ("por_sector", "por_area"):
-        for fila in resultados[corte]:
-            if fila["n"] < UMBRAL_SUPRESION:
-                fila["suprimido"] = True
-
-    # Filas individuales (ya seudonimizadas) para que el tablero recalcule cada
-    # indicador con los filtros aplicados, en vez de servir agregados fijos.
-    # Son 139 registros: cabe de sobra en el navegador y hace el filtrado real.
-    con = duckdb.connect(str(ALMACEN), read_only=True)
-    resultados["filas"] = _filas(con, """
-        SELECT
-            f.sk_egresado, f.anio_grado, f.estado_evidencia, f.sector,
-            f.ambito, f.nivel_confianza, f.tiene_evidencia_empleo, f.es_afin,
-            COALESCE(e.nombre, '')  AS empleador,
-            COALESCE(a.area, '')    AS area
-        FROM fact_observacion_laboral f
-        LEFT JOIN dim_empleador e USING (sk_empleador)
-        LEFT JOIN dim_area      a USING (sk_area)
-        ORDER BY f.anio_grado, f.sk_egresado
-    """)
-    con.close()
+    resultados["por_sector"] = agrupar_menores(
+        resultados["por_sector"], "sector", "Otros sectores")
+    resultados["por_area"] = agrupar_menores(
+        resultados["por_area"], "area", "Otras areas")
 
     resultados["_meta"] = {
         "umbral_supresion": UMBRAL_SUPRESION,
@@ -190,6 +238,11 @@ def imprimir(r):
     print("  Top empleadores (>=2 egresados):")
     for fila in r["top_empleadores"]:
         print(f"    {fila['empleador']:<42} {fila['n']:>3}")
+    print()
+    print(f"  Sector publicado (categorias < {UMBRAL_SUPRESION} agrupadas):")
+    for fila in r["por_sector"]:
+        nota = f"  (agrupa {fila['agrupa']})" if "agrupa" in fila else ""
+        print(f"    {fila['sector']:<42} {fila['n']:>3}{nota}")
     print()
     print("  Control de calidad:")
     print(f"    Registros sin clasificar       {cal['sin_clasificar']:>4}")
