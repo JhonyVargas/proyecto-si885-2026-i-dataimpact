@@ -109,7 +109,7 @@ CLASIFICACION = {
     "Banco Falabella / Backend (Golang PostgreSQL Kafka GRPC)": (
         "Banco Falabella", "Desarrollador Backend", DESARROLLO),
     "Instituto Superior John von Neumann": (
-        "Instituto Superior John von Neumann", None, DOCENCIA),
+        "Instituto Superior John von Neumann", None, NO_DETERMINADA),
     "Tsoft (Full Stack Developer / Node.js / NestJS / React / AWS)": (
         "Tsoft", "Full Stack Developer", DESARROLLO),
     "NTT DATA": ("NTT DATA", None, NO_DETERMINADA),
@@ -219,6 +219,8 @@ def clasificar(donde_labora, fuente):
             empleador, (SECTOR_NO_DET, AMBITO_NO_DET))
         # es_afin solo se afirma cuando el cargo es conocido. Con empleador
         # pero sin cargo la afinidad es desconocida, no falsa.
+        if not cargo:
+            area = NO_DETERMINADA
         es_afin = None if area == NO_DETERMINADA else (area in AREAS_AFINES)
         return {
             "estado_evidencia": EMPLEO_VERIFICADO,

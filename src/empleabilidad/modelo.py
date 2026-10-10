@@ -34,6 +34,10 @@ def construir():
         [str(SEMILLA)],
     )
 
+    # Corrige semillas anteriores sin inventar un cargo a partir del empleador.
+    con.execute("UPDATE stg_egresados SET area = 'No determinada', es_afin = NULL "
+                "WHERE NULLIF(TRIM(cargo), '') IS NULL")
+
     con.execute(SCRIPT_SQL.read_text(encoding="utf-8"))
 
     tablas = con.execute(

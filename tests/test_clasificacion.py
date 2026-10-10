@@ -84,3 +84,9 @@ def test_confianza_segun_fuente():
 def test_valor_desconocido_se_marca_para_revision():
     r = clasificar("Empresa Nueva Que No Existia Antes", "LinkedIn")
     assert r["estado_evidencia"] == "Requiere revision"
+
+def test_empleador_educativo_no_implica_docencia():
+    r = clasificar('Instituto Superior John von Neumann', 'LinkedIn')
+    assert r['cargo'] is None
+    assert r['area'] == 'No determinada'
+    assert r['es_afin'] is None
