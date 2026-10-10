@@ -23,7 +23,7 @@ python -m empleabilidad.tablero
 Start-Process .\dashboard\index.html
 ```
 
-El tablero funciona desde disco, sin servidor ni conexión de red. No se ha configurado ni realizado un despliegue.
+El tablero funciona desde disco, sin servidor ni conexión de red. También se publica en GitHub Pages: <https://upt-faing-epis.github.io/proyecto-si885-2026-i-dataimpact/>. El workflow `pages.yml` lo reconstruye desde la semilla en cada push a `main` y publica únicamente `dashboard/index.html`.
 
 El flujo completo `python -m empleabilidad.pipeline` comienza por la nómina nominal privada y requiere `data/raw/nomina_oficial_upt.csv`. Para trabajar únicamente con la semilla pública, utiliza los comandos anteriores.
 

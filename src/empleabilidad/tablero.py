@@ -27,7 +27,7 @@ def render():
 
     datos = json.loads(DATOS.read_text(encoding="utf-8"))
     # Se escapa </script> por si algun valor de texto lo contuviera.
-    payload = json.dumps(datos, ensure_ascii=False).replace("</", "<\/")
+    payload = json.dumps(datos, ensure_ascii=False).replace("</", "<\\/")
 
     SALIDA.write_text(html.replace(MARCA, payload), encoding="utf-8")
     kb = SALIDA.stat().st_size / 1024

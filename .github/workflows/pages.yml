@@ -1,0 +1,61 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  construir:
+    name: Construir tablero
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Reconstruir el tablero desde la semilla
+        run: |
+          PYTHONPATH=src python -m empleabilidad.modelo
+          PYTHONPATH=src python -m empleabilidad.kpis
+          PYTHONPATH=src python -m empleabilidad.tablero
+
+      # Solo se publica el HTML con agregados; nunca la raiz del repositorio.
+      - name: Preparar paquete publico
+        run: |
+          mkdir _site
+          cp dashboard/index.html _site/index.html
+          touch _site/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  desplegar:
+    name: Desplegar en GitHub Pages
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+
+    steps:
+      - id: despliegue
+        uses: actions/deploy-pages@v4
