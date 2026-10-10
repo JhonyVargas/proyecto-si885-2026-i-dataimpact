@@ -82,6 +82,7 @@ SELECT
     s.nivel_confianza,
     s.sector,
     s.ambito,
+    s.cargo,
     -- Medidas
     CASE WHEN s.estado_evidencia = 'Empleo verificado' THEN 1 ELSE 0 END
         AS tiene_evidencia_empleo,

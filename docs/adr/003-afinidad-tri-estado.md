@@ -25,7 +25,10 @@ y el denominador se reporta junto al porcentaje.
 
 ## Consecuencias
 
-- El denominador de afinidad (12) es mucho menor que el de empleo verificado
+- El denominador de afinidad original (12) es mucho menor que el de empleo verificado
   (35). La cifra es menos vistosa y más defendible.
 - Hay un test que impide que una futura refactorización colapse el `NULL` a
   `False`.
+
+Actualización 2026-10-10: el denominador se corrige a 11 al retirar la inferencia
+de docencia desde un empleador educativo sin cargo declarado. Ver ADR 004.
